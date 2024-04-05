@@ -1,0 +1,227 @@
+{
+  "version": "36.0.0",
+  "artifacts": {
+    "ApigwLambdaStack.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "ApigwLambdaStack.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "ApigwLambdaStack": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://619831221558/eu-central-1",
+      "properties": {
+        "templateFile": "ApigwLambdaStack.template.json",
+        "terminationProtection": false,
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::619831221558:role/cdk-hnb659fds-deploy-role-619831221558-eu-central-1",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::619831221558:role/cdk-hnb659fds-cfn-exec-role-619831221558-eu-central-1",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-619831221558-eu-central-1/8adae9e790225c2ef3bc0d82a741412f57ecdb15d10e681154d25b8ea9f4cc82.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "ApigwLambdaStack.assets"
+        ],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::619831221558:role/cdk-hnb659fds-lookup-role-619831221558-eu-central-1",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        }
+      },
+      "dependencies": [
+        "ApigwLambdaStack.assets"
+      ],
+      "metadata": {
+        "/ApigwLambdaStack/Certificate/CertificateRequestorFunction/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CertificateCertificateRequestorFunctionServiceRoleC04C13DA"
+          }
+        ],
+        "/ApigwLambdaStack/Certificate/CertificateRequestorFunction/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CertificateCertificateRequestorFunctionServiceRoleDefaultPolicy3C8845BC"
+          }
+        ],
+        "/ApigwLambdaStack/Certificate/CertificateRequestorFunction/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CertificateCertificateRequestorFunction5E845413"
+          }
+        ],
+        "/ApigwLambdaStack/Certificate/CertificateRequestorResource/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CertificateCertificateRequestorResource2890C6B7"
+          }
+        ],
+        "/ApigwLambdaStack/get_lambda/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "getlambdaServiceRole04B81BEC"
+          }
+        ],
+        "/ApigwLambdaStack/get_lambda/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "getlambda73E90600"
+          }
+        ],
+        "/ApigwLambdaStack/post_lambda/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "postlambdaServiceRole342CB485"
+          }
+        ],
+        "/ApigwLambdaStack/post_lambda/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "postlambdaCB2B7422"
+          }
+        ],
+        "/ApigwLambdaStack/api/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "apiC8550315"
+          }
+        ],
+        "/ApigwLambdaStack/api/CloudWatchRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "apiCloudWatchRoleAC81D93E"
+          }
+        ],
+        "/ApigwLambdaStack/api/Account": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "apiAccount57E28B43"
+          }
+        ],
+        "/ApigwLambdaStack/api/Deployment/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "apiDeployment149F1294876f0170050cc961a42c1b703100a618"
+          }
+        ],
+        "/ApigwLambdaStack/api/DeploymentStage.dev/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "apiDeploymentStagedev96712F43"
+          }
+        ],
+        "/ApigwLambdaStack/api/Endpoint": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "apiEndpoint9349E63C"
+          }
+        ],
+        "/ApigwLambdaStack/api/Default/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "apiOPTIONS5A1027A6"
+          }
+        ],
+        "/ApigwLambdaStack/api/Default/GET/ApiPermission.ApigwLambdaStackapi68FB2791.GET..": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "apiGETApiPermissionApigwLambdaStackapi68FB2791GET017ABDFB"
+          }
+        ],
+        "/ApigwLambdaStack/api/Default/GET/ApiPermission.Test.ApigwLambdaStackapi68FB2791.GET..": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "apiGETApiPermissionTestApigwLambdaStackapi68FB2791GETE3135A8F"
+          }
+        ],
+        "/ApigwLambdaStack/api/Default/GET/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "apiGETECF0BD67"
+          }
+        ],
+        "/ApigwLambdaStack/api/Default/POST/ApiPermission.ApigwLambdaStackapi68FB2791.POST..": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "apiPOSTApiPermissionApigwLambdaStackapi68FB2791POSTE22F1BE0"
+          }
+        ],
+        "/ApigwLambdaStack/api/Default/POST/ApiPermission.Test.ApigwLambdaStackapi68FB2791.POST..": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "apiPOSTApiPermissionTestApigwLambdaStackapi68FB2791POSTADEA611C"
+          }
+        ],
+        "/ApigwLambdaStack/api/Default/POST/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "apiPOST36368FF5"
+          }
+        ],
+        "/ApigwLambdaStack/api/UsagePlan/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "apiUsagePlan1B3969C7"
+          }
+        ],
+        "/ApigwLambdaStack/api/UsagePlan/UsagePlanKeyResource:ApigwLambdaStackapiApiKey006CFDBD": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "apiUsagePlanUsagePlanKeyResourceApigwLambdaStackapiApiKey006CFDBDA2A690DC"
+          }
+        ],
+        "/ApigwLambdaStack/api/ApiKey/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "apiApiKey9B5BC9C9"
+          }
+        ],
+        "/ApigwLambdaStack/cf/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "cf27D84970"
+          }
+        ],
+        "/ApigwLambdaStack/AliasRecord/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AliasRecord851000D2"
+          }
+        ],
+        "/ApigwLambdaStack/AWSCloudFrontPartitionHostedZoneIdMap": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AWSCloudFrontPartitionHostedZoneIdMap"
+          }
+        ],
+        "/ApigwLambdaStack/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/ApigwLambdaStack/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/ApigwLambdaStack/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "ApigwLambdaStack"
+    },
+    "Tree": {
+      "type": "cdk:tree",
+      "properties": {
+        "file": "tree.json"
+      }
+    }
+  }
+}
