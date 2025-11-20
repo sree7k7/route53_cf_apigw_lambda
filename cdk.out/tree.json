@@ -686,7 +686,7 @@
                     },
                     "hostedZoneId": "Z09298212LCS7P3M5N2EW",
                     "name": "*.srikanth.help.",
-                    "type": "A"
+                    "type": "AAAA"
                   }
                 },
                 "constructInfo": {
@@ -696,7 +696,7 @@
               }
             },
             "constructInfo": {
-              "fqn": "aws-cdk-lib.aws_route53.ARecord",
+              "fqn": "aws-cdk-lib.aws_route53.AaaaRecord",
               "version": "2.131.0"
             }
           },

@@ -516,7 +516,7 @@
     },
     "HostedZoneId": "Z09298212LCS7P3M5N2EW",
     "Name": "*.srikanth.help.",
-    "Type": "A"
+    "Type": "AAAA"
    },
    "Metadata": {
     "aws:cdk:path": "ApigwLambdaStack/PdfBucketAliasAaaaRecord/Resource"
@@ -525,7 +525,7 @@
   "CDKMetadata": {
    "Type": "AWS::CDK::Metadata",
    "Properties": {
-    "Analytics": "v2:deflate64:H4sIAAAAAAAA/22Q0WoCMRBFv8X3mFaXfoCuFPpQKiv0VcZkdjt1N5HMpCIh/142W6uFPt1zM3cGbpZ6US304wzOPDf2OO/poNNOwBxVg+xjMKjgzPtkMAi1ZEBwAAcdBr1x/A49WRC09W2sehgOFnR6js4Ieafq1l05K4JBp8b3OD4X3fqezGW0E2XF1R6YUVivRlFc6bSO5oiyBkY14bjwQ5Pc7tz7rEzvo22Dd6LTW6CO3MoYZH6x6ISkbNRj5nnM/JvYEEugQ7zWufdZBR8FnyqdVg0aH2xpVmiHkrMqJXYCHblO1ZHFD7+fW6JX/jPaBv9FFkOpXLfuFU4ncl1W24t8ePdQ6cVSV7NPJpqH6IQG1M2k32w8QCnWAQAA"
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/22QwW7CMBBEv4W7cQtRPyAEIfVQFQWpV7TYm3QhsZF3XYQs/3uVpBQq9TRvvLMrjZd6USz08wwuPDf2NO/ooNNOwJxUjexjMKjgwvtkMAg1ZECwBwctBr12/AEdWRC01X2sOugPFnTaRGeEvFNV426cFUGvU+07HJ5H3fqOzHWwE2XFxR6YUViXgygudFpFc0JZAaOacFj4oUnudx59Vqbz0TbBO9HpPVBLrjQGmV8tOiEZN6ohsxky/ybWxBLoEG91Hn1WwUfBl0Knskbjgx2bjbRDUSUATC5nNfbZCbTkWlVFFt///vO4deM/o23wX2QxjO2rxr3B+UyuzWp7lU/vngq9WOpidmSieYhOqEddT/oNMH+xS+EBAAA="
    },
    "Metadata": {
     "aws:cdk:path": "ApigwLambdaStack/CDKMetadata/Default"

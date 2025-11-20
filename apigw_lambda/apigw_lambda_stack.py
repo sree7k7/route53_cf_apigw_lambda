@@ -35,7 +35,6 @@ class ApigwLambdaStack(Stack):
         srikanth_help = route53.HostedZone.from_lookup(
             self, 'HostedZone',
             domain_name=DOMAIN_NAME, # replace with your domain
-
         )
 
         # create a certificate for not-my-money.net, vigo.not-my-money.net, cooper.not-my-money.net
@@ -58,18 +57,8 @@ class ApigwLambdaStack(Stack):
                                 auto_delete_objects=True,
                                 block_public_access=s3.BlockPublicAccess.BLOCK_ALL,
                                 versioned=False,
-                                # website_index_document=S3_FILE_NAME,
                                 )
         
-        ## bucetk policy
-        # pdf_bucket.add_to_resource_policy(
-        #     iam.PolicyStatement(
-        #         principals=[iam.AnyPrincipal()],
-        #         actions=["s3:GetObject"],
-        #         resources=[pdf_bucket.arn_for_objects("*")],
-        #     )
-        # )
-
         ## configure OAI origin access identity for cloudfront to access s3 bucket
 
         oai = cloudfront.OriginAccessIdentity(self, "PdfBucketOAI",
