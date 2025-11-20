@@ -11,7 +11,7 @@ import aws_cdk.aws_lambda as _lambda
 import aws_cdk.aws_apigateway as apigw
 import aws_cdk.aws_apigatewayv2 as apigw2
 import aws_cdk.aws_cloudwatch as cloudwatch
-from aws_cdk import aws_s3 as _s3
+from aws_cdk import aws_s3 as s3
 from aws_cdk import aws_cloudfront as cloudfront
 from aws_cdk import aws_route53 as route53
 from aws_cdk import aws_route53_targets as route53_targets
@@ -19,181 +19,342 @@ from aws_cdk import aws_certificatemanager as acm
 from aws_cdk import aws_cloudfront_origins as origins
 # from aws_cdk import core as cdk
 
+# --- CONFIGURATION ---
+DOMAIN_NAME = "srikanth.help"
+# HOSTED_ZONE_ID = "YOUR_HOSTED_ZONE_ID" # e.g., 'Z0123456789ABCDEF'
+# ACM_CERTIFICATE_ARN = "arn:aws:acm:us-east-1:ACCOUNT_ID:certificate/..."
+S3_FILE_NAME = "Srikanth_Ankam_Cloud.pdf" # The name of your CV file in the S3 bucket
+bucket_name = "srikanth.help" # S3 bucket name must be globally unique
+region = "us-east-1"
 
 class ApigwLambdaStack(Stack):
 
     def __init__(self, scope: Construct, construct_id: str, **kwargs) -> None:
         super().__init__(scope, construct_id, **kwargs)
 
-        not_my_money_net = route53.HostedZone.from_lookup(
+        srikanth_help = route53.HostedZone.from_lookup(
             self, 'HostedZone',
-            domain_name='not-my-money.net',
+            domain_name=DOMAIN_NAME, # replace with your domain
 
         )
 
-        # acm
+        # create a certificate for not-my-money.net, vigo.not-my-money.net, cooper.not-my-money.net
         certificate = acm.DnsValidatedCertificate(
             self, 'Certificate',
-            certificate_name='not-my-money.net',
-            domain_name=not_my_money_net.zone_name,
-            hosted_zone=not_my_money_net,
-            region='us-east-1',
+            domain_name=DOMAIN_NAME,
+            subject_alternative_names=['www.srikanth.help', '*.srikanth.help'],
+            hosted_zone=srikanth_help,
+            region=region,
             validation=acm.CertificateValidation.from_dns(
-                not_my_money_net,               
+                srikanth_help,
                 ), # records are added to the zone automatically
             cleanup_route53_records=True, # default is True
         )
 
-        #To automate the creation of a record in Route53 for ACM using AWS CDK
-
-        # route53.CnameRecord(
-        #     self, 'CnameRecord',
-        #     zone=not_my_money_net,
-        #     domain_name=not_my_money_net.zone_name,
-        #     record_name='not-my-money.net',
-        #     ttl=Duration.seconds(300),
+        # # s3 bucket to store pdf file to retrieve via domain output the 
+        pdf_bucket = s3.Bucket(self, "PdfBucket",
+                                bucket_name=bucket_name,
+                                removal_policy=RemovalPolicy.DESTROY,
+                                auto_delete_objects=True,
+                                block_public_access=s3.BlockPublicAccess.BLOCK_ALL,
+                                versioned=False,
+                                # website_index_document=S3_FILE_NAME,
+                                )
+        
+        ## bucetk policy
+        # pdf_bucket.add_to_resource_policy(
+        #     iam.PolicyStatement(
+        #         principals=[iam.AnyPrincipal()],
+        #         actions=["s3:GetObject"],
+        #         resources=[pdf_bucket.arn_for_objects("*")],
+        #     )
         # )
 
-        # api domain name options, api mapping
-        domain_name_options = apigw.DomainNameOptions(
-            certificate=certificate,
-            domain_name=not_my_money_net.zone_name,
-            # base_path=base_path,
-            endpoint_type=apigw.EndpointType.EDGE,
-            security_policy=apigw.SecurityPolicy.TLS_1_2,
+        ## configure OAI origin access identity for cloudfront to access s3 bucket
+
+        oai = cloudfront.OriginAccessIdentity(self, "PdfBucketOAI",
+            comment="OAI for srikanth.help S3 bucket"
         )
-        # create a lambda function for get method
-        # The code will be automatically uploaded to Lambda by the CDK
-        get_lambda = _lambda.Function(self, "get_lambda",
-                                      function_name="get_method_lambda",
-                                      runtime=_lambda.Runtime.PYTHON_3_12,
-                                      code=_lambda.Code.from_asset("lambda"),
-                                      handler="get_method.lambda_handler"
-                                      )
-        
-        # create a lambda function for post method
-        # You have to pass the value of the body to the lambda function, such as: key=value or {"key": "value"} pair
-        post_lambda = _lambda.Function(self, "post_lambda",
-                                      function_name="post_method_lambda",
-                                      runtime=_lambda.Runtime.PYTHON_3_12,
-                                      code=_lambda.Code.from_asset("lambda"),
-                                      handler="post_method.lambda_handler"
-                                      )
-        
-        #3. Create an API Gateway
-        #3.1 Create a REST API
-        api = apigw.RestApi(self, "api",
-                            rest_api_name="rest_api",
-                            description="This is a rest api",
-                            deploy=True,
-                            endpoint_types=[apigw.EndpointType.REGIONAL],
-                            deploy_options=apigw.StageOptions(
-                                stage_name="dev",
-                                logging_level=apigw.MethodLoggingLevel.INFO,
-                                data_trace_enabled=True,
-                                metrics_enabled=True,
-                                tracing_enabled=True
-                            ),
-                            retain_deployments=False,
-                            default_cors_preflight_options=apigw.CorsOptions(
-                                allow_origins=apigw.Cors.ALL_ORIGINS,
-                                allow_methods=apigw.Cors.ALL_METHODS
-                            ),
-                            default_method_options=apigw.MethodOptions(
-                                authorization_type=apigw.AuthorizationType.NONE
-                            ),
-                            cloud_watch_role=True,
-                            cloud_watch_role_removal_policy=RemovalPolicy.DESTROY,
-                            # policy=iam.PolicyDocument(
-                            #     statements=[
-                            #         iam.PolicyStatement(
-                            #             effect=iam.Effect.ALLOW,
-                            #             principals=[iam.AnyPrincipal()],
-                            #             actions=["execute-api:Invoke"],
-                            #             resources=["execute-api:/*/*/*"],
-                            #             conditions={
-                            #                 "IpAddress": {
-                            #                     "aws:SourceIp": ["83.221.156.201"]
-                            #                 }
-                            #             }
-                            #         )
-                            #     ])
-                            )
+        pdf_bucket.grant_read(oai)
 
-        # # get method
-        get_method = api.root.add_method(
-            "GET", 
-            apigw.LambdaIntegration(get_lambda),
-            api_key_required=False,
-            # request_parameters={
-            #     "method.request.header.Content-Type": True
-            # }
-            )
-        # post method
-        post_method = api.root.add_method(
-            "POST", 
-            apigw.LambdaIntegration(post_lambda),
-            api_key_required=True,
-            request_parameters={
-                "method.request.header.Content-Type": True
-            }
-            )
+        ## cloudfront distribution for s3 bucket static website hosting
+        distribution = cloudfront.Distribution(self, "PdfBucketDistribution",
+            default_root_object=S3_FILE_NAME,
+            default_behavior=cloudfront.BehaviorOptions(
+                cache_policy=cloudfront.CachePolicy.CACHING_OPTIMIZED,
+                origin=origins.S3Origin(
+                    pdf_bucket,
+                    origin_access_identity=oai
+                    ),
+                viewer_protocol_policy=cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+            ),
+            certificate=certificate,
+            price_class=cloudfront.PriceClass.PRICE_CLASS_100,
+            domain_names=[f"{DOMAIN_NAME}", f"www.{DOMAIN_NAME}", f"*.{DOMAIN_NAME}"],
+        )
 
-        # create usage plan
-        plan = api.add_usage_plan("UsagePlan",
-                                  name="usage_plan",
-                                  description="This is a usage plan",
-                                  api_stages=[apigw.UsagePlanPerApiStage(
-                                      api=api,
-                                      stage=api.deployment_stage
-                                  )]
-                                  )
-
-        key = api.add_api_key("ApiKey")
-        # associate the API key with the usage plan
-        plan.add_api_key(key)
-
-        # add tags to api_key
-        # cfn = cdk.CfnTags(self, "Tags")
-        # cfn.add_tags(key.key_id, {
-        #     'Name': 'api_key',
-        #     'Environment': 'dev'
-        # })
-
-        # create a cloudfront distribution and associate it with the apigateway        
-
-        # # cloudfront dribution 
-        cloudfrnt = cloudfront.Distribution(self, "cf",
-                                            default_behavior=cloudfront.BehaviorOptions(  
-                                                origin=origins.HttpOrigin(f"{api.rest_api_id}.execute-api.{self.region}.amazonaws.com",
-                                                                           origin_path="/dev",
-                                                                           protocol_policy=cloudfront.OriginProtocolPolicy.HTTPS_ONLY),
-                                                # edge_lambdas=[cloudfront.EdgeLambda(
-                                                #     function_version=get_lambda.current_version,
-                                                #     event_type=cloudfront.LambdaEdgeEventType.ORIGIN_REQUEST
-                                                # )],                                           
-                                                allowed_methods=cloudfront.AllowedMethods.ALLOW_ALL,
-                                                viewer_protocol_policy=cloudfront.ViewerProtocolPolicy.ALLOW_ALL,
-                                                cache_policy=cloudfront.CachePolicy.CACHING_DISABLED,
-                                                origin_request_policy=cloudfront.OriginRequestPolicy.ALL_VIEWER_EXCEPT_HOST_HEADER,
-                                                compress=True,
-                                            ),
-                                            certificate=certificate,
-                                            domain_names=[not_my_money_net.zone_name],
-                                            enable_logging=False,
-                                            log_file_prefix="my-cloudfront-logs",
-                                            ssl_support_method=cloudfront.SSLMethod.SNI,
-                                            enabled=True,
-                                            # log_retention=logs.RetentionDays.ONE_WEEK,
-                                            # web_acl_id=web_acl.web_acl_id,
-                                            # geo_restriction=cloudfront.GeoRestriction.allowlist("US", "GB"),
-                                            http_version=cloudfront.HttpVersion.HTTP2,
-                                            minimum_protocol_version=cloudfront.SecurityPolicyProtocol.TLS_V1_2_2021,
-                                            )
         # # create a record in route53, record type is A
-        route53.ARecord(self, "AliasRecord",
-                        zone=not_my_money_net,
-                        target=route53.RecordTarget.from_alias(route53_targets.CloudFrontTarget(cloudfrnt)),
-                        record_name="not-my-money.net",
+        route53.ARecord(self, "PdfBucketAliasRecord",
+                        zone=srikanth_help,
+                        target=route53.RecordTarget.from_alias(route53_targets.CloudFrontTarget(distribution)),
+                        record_name="srikanth.help",
                         ttl=Duration.seconds(300),
                         )
+        route53.ARecord(self, "WwwPdfBucketAliasRecord",
+                        zone=srikanth_help,
+                        target=route53.RecordTarget.from_alias(route53_targets.CloudFrontTarget(distribution)),
+                        record_name=f"www.{srikanth_help.zone_name}",
+                        ttl=Duration.seconds(300),
+                        )
+        route53.AaaaRecord(self, "PdfBucketAliasAaaaRecord",
+                        zone=srikanth_help,
+                        target=route53.RecordTarget.from_alias(route53_targets.CloudFrontTarget(distribution)),
+                        record_name="*.srikanth.help",
+                        ttl=Duration.seconds(300),
+                        )
+        
+
+        # enable static website hosting
+        
+        ## connect route53 zone to s3 bucket objects for static website hosting
+        # route53.ARecord(self, "PdfBucketAliasRecord",
+        #                 zone=srikanth_help,
+        #                 target=route53.RecordTarget.from_alias(route53_targets.BucketWebsiteTarget(pdf_bucket)),
+        #                 record_name="pdf.srikanth.help",
+        #                 ttl=Duration.seconds(300),
+        #                 )
+        
+
+
+
+        #     certificate = acm.DnsValidatedCertificate(
+        #     self, 'Certificate',
+        #     certificate_name='not-my-money.net',
+        #     domain_name=not_my_money_net.zone_name,
+        #     hosted_zone=not_my_money_net,
+        #     region='us-east-1',
+        #     validation=acm.CertificateValidation.from_dns(
+        #         not_my_money_net,               
+        #         ), # records are added to the zone automatically
+        #     cleanup_route53_records=True, # default is True
+        # )
+
+        # # create a another name for the domain: vigo.not-my-money.net
+        # vigo_certificate = acm.DnsValidatedCertificate(
+        #     self, 'VigoCertificate',
+        #     certificate_name='vigo.not-my-money.net',
+        #     domain_name='vigo.not-my-money.net',
+        #     hosted_zone=not_my_money_net,
+        #     region='us-east-1',
+        #     validation=acm.CertificateValidation.from_dns(
+        #         not_my_money_net,               
+        #         ), # records are added to the zone automatically
+        #     cleanup_route53_records=True, # default is True
+        # )
+
+        # # create a certificate for cooper.not-my-money.net, not-my-money.net, vigo.not-my-money.net
+        # certificate = acm.Certificate(    
+        #     self, 'Certificate',
+        #     domain_name='not-my-money.net',
+        #     subject_alternative_names=['vigo.not-my-money.net', 'cooper.not-my-money.net'],
+        #     key_algorithm=acm.KeyAlgorithm.RSA_2048,
+        #     validation=acm.CertificateValidation.from_dns(not_my_money_net),
+        # )
+
+        # notmymoneynet = route53.HostedZone(self, "not-my-money.net",
+        #     zone_name="not-my-money.net"
+        # )
+        # # example_net = route53.HostedZone(self, "ExampleNet",
+        # #     zone_name="example.net"
+        # # )
+        # certificate = acm.Certificate(self, "Certificate",
+        #     domain_name="not-my-money.net",
+        #     subject_alternative_names=["vigo.not-my-money.net", "cooper.not-my-money.net"],
+        #     validation=acm.CertificateValidation.from_dns_multi_zone({
+        #         "not-my-money.net": notmymoneynet,
+        #         # "cool.example.com": example_com,
+        #         # "test.example.net": example_net
+        #     })
+        # )
+        # api domain name options, api mapping
+        # domain_name_options = apigw.DomainNameOptions(
+        #     certificate=certificate,
+        #     domain_name=not_my_money_net.zone_name,
+        #     # base_path=base_path,
+        #     endpoint_type=apigw.EndpointType.EDGE,
+        #     security_policy=apigw.SecurityPolicy.TLS_1_2,
+        # )
+        # # create a lambda function for get method
+        # # The code will be automatically uploaded to Lambda by the CDK
+        # get_lambda = _lambda.Function(self, "get_lambda",
+        #                               function_name="get_method_lambda",
+        #                               runtime=_lambda.Runtime.PYTHON_3_12,
+        #                               code=_lambda.Code.from_asset("lambda"),
+        #                               handler="get_method.lambda_handler"
+        #                               )
+        # vigo_lambda = _lambda.Function(self, "vigoget_lambda",
+        #                               function_name="vigo_get_method_lambda",
+        #                               runtime=_lambda.Runtime.PYTHON_3_12,
+        #                               code=_lambda.Code.from_asset("lambda"),
+        #                               handler="vigo_method.lambda_handler"
+        #                               )
+        
+        # # create a lambda function for post method
+        # # You have to pass the value of the body to the lambda function, such as: key=value or {"key": "value"} pair
+        # post_lambda = _lambda.Function(self, "post_lambda",
+        #                               function_name="post_method_lambda",
+        #                               runtime=_lambda.Runtime.PYTHON_3_12,
+        #                               code=_lambda.Code.from_asset("lambda"),
+        #                               handler="post_method.lambda_handler"
+        #                               )
+        
+        # #3. Create an API Gateway
+        # #3.1 Create a REST API
+        # api = apigw.RestApi(self, "api",
+        #                     rest_api_name="rest_api",
+        #                     description="This is a rest api",
+        #                     deploy=True,
+        #                     endpoint_types=[apigw.EndpointType.REGIONAL],
+        #                     deploy_options=apigw.StageOptions(
+        #                         stage_name="dev",
+        #                         logging_level=apigw.MethodLoggingLevel.INFO,
+        #                         data_trace_enabled=True,
+        #                         metrics_enabled=True,
+        #                         tracing_enabled=True
+        #                     ),
+        #                     retain_deployments=False,
+        #                     default_cors_preflight_options=apigw.CorsOptions(
+        #                         allow_origins=apigw.Cors.ALL_ORIGINS,
+        #                         allow_methods=apigw.Cors.ALL_METHODS
+        #                     ),
+        #                     default_method_options=apigw.MethodOptions(
+        #                         authorization_type=apigw.AuthorizationType.NONE
+        #                     ),
+        #                     cloud_watch_role=True,
+        #                     cloud_watch_role_removal_policy=RemovalPolicy.DESTROY,
+        #                     # policy=iam.PolicyDocument(
+        #                     #     statements=[
+        #                     #         iam.PolicyStatement(
+        #                     #             effect=iam.Effect.ALLOW,
+        #                     #             principals=[iam.AnyPrincipal()],
+        #                     #             actions=["execute-api:Invoke"],
+        #                     #             resources=["execute-api:/*/*/*"],
+        #                     #             conditions={
+        #                     #                 "IpAddress": {
+        #                     #                     "aws:SourceIp": ["83.221.156.201"]
+        #                     #                 }
+        #                     #             }
+        #                     #         )
+        #                     #     ])
+        #                     )
+
+        # # # get method
+        # get_method = api.root.add_method(
+        #     "GET", 
+        #     apigw.LambdaIntegration(get_lambda),
+        #     api_key_required=False,
+        #     # request_parameters={
+        #     #     "method.request.header.Content-Type": True
+        #     # }
+        #     )
+        
+        # # # vigo method
+        # # vigo_method = api.root.add_method(
+        # #     "GET", 
+        # #     apigw.LambdaIntegration(vigo_lambda),
+        # #     api_key_required=False,
+        # #     # request_parameters={
+        # #     #     "method.request.header.Content-Type": True
+        # #     # }
+        # #     )
+
+        # # post method
+        # post_method = api.root.add_method(
+        #     "POST", 
+        #     apigw.LambdaIntegration(post_lambda),
+        #     api_key_required=True,
+        #     request_parameters={
+        #         "method.request.header.Content-Type": True
+        #     }
+        #     )
+
+        # # create usage plan
+        # plan = api.add_usage_plan("UsagePlan",
+        #                           name="usage_plan",
+        #                           description="This is a usage plan",
+        #                           api_stages=[apigw.UsagePlanPerApiStage(
+        #                               api=api,
+        #                               stage=api.deployment_stage
+        #                           )]
+        #                           )
+
+        # key = api.add_api_key("ApiKey")
+        # # associate the API key with the usage plan
+        # plan.add_api_key(key)
+
+        # # add tags to api_key
+        # # cfn = cdk.CfnTags(self, "Tags")
+        # # cfn.add_tags(key.key_id, {
+        # #     'Name': 'api_key',
+        # #     'Environment': 'dev'
+        # # })
+
+        # # create a cloudfront distribution and associate it with the apigateway        
+
+        # # # cloudfront dribution 
+        # cloudfrnt = cloudfront.Distribution(self, "cf",
+        #                                     default_behavior=cloudfront.BehaviorOptions(  
+        #                                         origin=origins.HttpOrigin(f"{api.rest_api_id}.execute-api.{self.region}.amazonaws.com",
+        #                                                                    origin_path="/dev",
+        #                                                                    protocol_policy=cloudfront.OriginProtocolPolicy.HTTPS_ONLY),
+        #                                         # edge_lambdas=[cloudfront.EdgeLambda(
+        #                                         #     function_version=get_lambda.current_version,
+        #                                         #     event_type=cloudfront.LambdaEdgeEventType.ORIGIN_REQUEST
+        #                                         # )],                                           
+        #                                         allowed_methods=cloudfront.AllowedMethods.ALLOW_ALL,
+        #                                         viewer_protocol_policy=cloudfront.ViewerProtocolPolicy.ALLOW_ALL,
+        #                                         cache_policy=cloudfront.CachePolicy.CACHING_DISABLED,
+        #                                         origin_request_policy=cloudfront.OriginRequestPolicy.ALL_VIEWER_EXCEPT_HOST_HEADER,
+        #                                         compress=True,
+        #                                     ),
+        #                                     certificate=certificate,
+        #                                     domain_names=[not_my_money_net.zone_name, f"vigo.{not_my_money_net.zone_name}", f"cooper.{not_my_money_net.zone_name}", f"*.{not_my_money_net.zone_name}"],
+        #                                     enable_logging=False,
+        #                                     log_file_prefix="my-cloudfront-logs",
+        #                                     ssl_support_method=cloudfront.SSLMethod.SNI,
+        #                                     enabled=True,
+        #                                     # log_retention=logs.RetentionDays.ONE_WEEK,
+        #                                     # web_acl_id=web_acl.web_acl_id,
+        #                                     # geo_restriction=cloudfront.GeoRestriction.allowlist("US", "GB"),
+        #                                     http_version=cloudfront.HttpVersion.HTTP2,
+        #                                     minimum_protocol_version=cloudfront.SecurityPolicyProtocol.TLS_V1_2_2021,
+        #                                     )
+        # # # create a record in route53, record type is A
+        # route53.ARecord(self, "AliasRecord",
+        #                 zone=not_my_money_net,
+        #                 target=route53.RecordTarget.from_alias(route53_targets.CloudFrontTarget(cloudfrnt)),
+        #                 record_name="not-my-money.net",
+        #                 ttl=Duration.seconds(300),
+        #                 )
+        # # # add vigo record
+        # route53.ARecord(self, "VigoRecord",
+        #                 zone=not_my_money_net,
+        #                 target=route53.RecordTarget.from_alias(route53_targets.CloudFrontTarget(cloudfrnt)),
+        #                 record_name="vigo.not-my-money.net",
+        #                 ttl=Duration.seconds(300),
+        #                 )
+        
+        # # # add cooper record
+        # route53.ARecord(self, "CooperRecord", 
+        #                 zone=not_my_money_net,
+        #                 target=route53.RecordTarget.from_alias(route53_targets.CloudFrontTarget(cloudfrnt)),
+        #                 record_name="cooper.not-my-money.net",
+        #                 ttl=Duration.seconds(300),
+        #                 )
+        # # # add vigo record *.not-my-money.net
+        # route53.ARecord(self, "VigoRecordWildcard",
+        #                 zone=not_my_money_net,
+        #                 target=route53.RecordTarget.from_alias(route53_targets.CloudFrontTarget(cloudfrnt)),
+        #                 record_name="*.not-my-money.net",
+        #                 ttl=Duration.seconds(300),
+        #                 )

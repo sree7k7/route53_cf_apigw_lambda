@@ -2,5 +2,9 @@
   "hosted-zone:account=619831221558:domainName=not-my-money.net:region=eu-central-1": {
     "Id": "/hostedzone/Z06526771KPGQU0GKV5CX",
     "Name": "not-my-money.net."
+  },
+  "hosted-zone:account=230150030147:domainName=srikanth.help:region=us-east-1": {
+    "Id": "/hostedzone/Z09298212LCS7P3M5N2EW",
+    "Name": "srikanth.help."
   }
 }

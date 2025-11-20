@@ -11,21 +11,21 @@
     },
     "ApigwLambdaStack": {
       "type": "aws:cloudformation:stack",
-      "environment": "aws://619831221558/eu-central-1",
+      "environment": "aws://230150030147/us-east-1",
       "properties": {
         "templateFile": "ApigwLambdaStack.template.json",
         "terminationProtection": false,
         "validateOnSynth": false,
-        "assumeRoleArn": "arn:${AWS::Partition}:iam::619831221558:role/cdk-hnb659fds-deploy-role-619831221558-eu-central-1",
-        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::619831221558:role/cdk-hnb659fds-cfn-exec-role-619831221558-eu-central-1",
-        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-619831221558-eu-central-1/714f65194ad7c043485134f41f9749ec6d931f26c6e030c0555f782aa27366e1.json",
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::230150030147:role/cdk-hnb659fds-deploy-role-230150030147-us-east-1",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::230150030147:role/cdk-hnb659fds-cfn-exec-role-230150030147-us-east-1",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-230150030147-us-east-1/d7d19c429b57153c58adfc13e78e2665de8e2191eff72547df504ae2d4d49e87.json",
         "requiresBootstrapStackVersion": 6,
         "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
         "additionalDependencies": [
           "ApigwLambdaStack.assets"
         ],
         "lookupRole": {
-          "arn": "arn:${AWS::Partition}:iam::619831221558:role/cdk-hnb659fds-lookup-role-619831221558-eu-central-1",
+          "arn": "arn:${AWS::Partition}:iam::230150030147:role/cdk-hnb659fds-lookup-role-230150030147-us-east-1",
           "requiresBootstrapStackVersion": 8,
           "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
         }
@@ -58,142 +58,70 @@
             "data": "CertificateCertificateRequestorResource2890C6B7"
           }
         ],
-        "/ApigwLambdaStack/get_lambda/ServiceRole/Resource": [
+        "/ApigwLambdaStack/PdfBucket/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "getlambdaServiceRole04B81BEC"
+            "data": "PdfBucketFA9E115A"
           }
         ],
-        "/ApigwLambdaStack/get_lambda/Resource": [
+        "/ApigwLambdaStack/PdfBucket/Policy/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "getlambda73E90600"
+            "data": "PdfBucketPolicy89599CFB"
           }
         ],
-        "/ApigwLambdaStack/post_lambda/ServiceRole/Resource": [
+        "/ApigwLambdaStack/PdfBucket/AutoDeleteObjectsCustomResource/Default": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "postlambdaServiceRole342CB485"
+            "data": "PdfBucketAutoDeleteObjectsCustomResource0E5D0F3D"
           }
         ],
-        "/ApigwLambdaStack/post_lambda/Resource": [
+        "/ApigwLambdaStack/Custom::S3AutoDeleteObjectsCustomResourceProvider/Role": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "postlambdaCB2B7422"
+            "data": "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092"
           }
         ],
-        "/ApigwLambdaStack/api/Resource": [
+        "/ApigwLambdaStack/Custom::S3AutoDeleteObjectsCustomResourceProvider/Handler": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "apiC8550315"
+            "data": "CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F"
           }
         ],
-        "/ApigwLambdaStack/api/CloudWatchRole/Resource": [
+        "/ApigwLambdaStack/PdfBucketOAI/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "apiCloudWatchRoleAC81D93E"
+            "data": "PdfBucketOAI5DE5A6F2"
           }
         ],
-        "/ApigwLambdaStack/api/Account": [
+        "/ApigwLambdaStack/PdfBucketDistribution/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "apiAccount57E28B43"
+            "data": "PdfBucketDistribution4384CBC7"
           }
         ],
-        "/ApigwLambdaStack/api/Deployment/Resource": [
+        "/ApigwLambdaStack/PdfBucketAliasRecord/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "apiDeployment149F1294876f0170050cc961a42c1b703100a618"
-          }
-        ],
-        "/ApigwLambdaStack/api/DeploymentStage.dev/Resource": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "apiDeploymentStagedev96712F43"
-          }
-        ],
-        "/ApigwLambdaStack/api/Endpoint": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "apiEndpoint9349E63C"
-          }
-        ],
-        "/ApigwLambdaStack/api/Default/OPTIONS/Resource": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "apiOPTIONS5A1027A6"
-          }
-        ],
-        "/ApigwLambdaStack/api/Default/GET/ApiPermission.ApigwLambdaStackapi68FB2791.GET..": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "apiGETApiPermissionApigwLambdaStackapi68FB2791GET017ABDFB"
-          }
-        ],
-        "/ApigwLambdaStack/api/Default/GET/ApiPermission.Test.ApigwLambdaStackapi68FB2791.GET..": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "apiGETApiPermissionTestApigwLambdaStackapi68FB2791GETE3135A8F"
-          }
-        ],
-        "/ApigwLambdaStack/api/Default/GET/Resource": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "apiGETECF0BD67"
-          }
-        ],
-        "/ApigwLambdaStack/api/Default/POST/ApiPermission.ApigwLambdaStackapi68FB2791.POST..": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "apiPOSTApiPermissionApigwLambdaStackapi68FB2791POSTE22F1BE0"
-          }
-        ],
-        "/ApigwLambdaStack/api/Default/POST/ApiPermission.Test.ApigwLambdaStackapi68FB2791.POST..": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "apiPOSTApiPermissionTestApigwLambdaStackapi68FB2791POSTADEA611C"
-          }
-        ],
-        "/ApigwLambdaStack/api/Default/POST/Resource": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "apiPOST36368FF5"
-          }
-        ],
-        "/ApigwLambdaStack/api/UsagePlan/Resource": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "apiUsagePlan1B3969C7"
-          }
-        ],
-        "/ApigwLambdaStack/api/UsagePlan/UsagePlanKeyResource:ApigwLambdaStackapiApiKey006CFDBD": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "apiUsagePlanUsagePlanKeyResourceApigwLambdaStackapiApiKey006CFDBDA2A690DC"
-          }
-        ],
-        "/ApigwLambdaStack/api/ApiKey/Resource": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "apiApiKey9B5BC9C9"
-          }
-        ],
-        "/ApigwLambdaStack/cf/Resource": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "cf27D84970"
-          }
-        ],
-        "/ApigwLambdaStack/AliasRecord/Resource": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "AliasRecord851000D2"
+            "data": "PdfBucketAliasRecordCF38E918"
           }
         ],
         "/ApigwLambdaStack/AWSCloudFrontPartitionHostedZoneIdMap": [
           {
             "type": "aws:cdk:logicalId",
             "data": "AWSCloudFrontPartitionHostedZoneIdMap"
+          }
+        ],
+        "/ApigwLambdaStack/WwwPdfBucketAliasRecord/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "WwwPdfBucketAliasRecord8A23D7EE"
+          }
+        ],
+        "/ApigwLambdaStack/PdfBucketAliasAaaaRecord/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PdfBucketAliasAaaaRecord69E0B034"
           }
         ],
         "/ApigwLambdaStack/CDKMetadata/Default": [

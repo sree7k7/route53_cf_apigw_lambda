@@ -64,12 +64,14 @@
         },
         "ForAllValues:StringLike": {
          "route53:ChangeResourceRecordSetsNormalizedRecordNames": [
-          "*.not-my-money.net"
+          "*.srikanth.help",
+          "*.www.srikanth.help",
+          "*.srikanth.help"
          ]
         }
        },
        "Effect": "Allow",
-       "Resource": "arn:aws:route53:::hostedzone/Z06526771KPGQU0GKV5CX"
+       "Resource": "arn:aws:route53:::hostedzone/Z09298212LCS7P3M5N2EW"
       }
      ],
      "Version": "2012-10-17"
@@ -89,7 +91,7 @@
    "Type": "AWS::Lambda::Function",
    "Properties": {
     "Code": {
-     "S3Bucket": "cdk-hnb659fds-assets-619831221558-eu-central-1",
+     "S3Bucket": "cdk-hnb659fds-assets-230150030147-us-east-1",
      "S3Key": "b073cebcf4d61fb152a30f5a5e57a94df7f980a549fdf1a79a0b18c5750522d8.zip"
     },
     "Handler": "index.certificateRequestHandler",
@@ -122,8 +124,12 @@
       "Arn"
      ]
     },
-    "DomainName": "not-my-money.net",
-    "HostedZoneId": "Z06526771KPGQU0GKV5CX",
+    "DomainName": "srikanth.help",
+    "SubjectAlternativeNames": [
+     "www.srikanth.help",
+     "*.srikanth.help"
+    ],
+    "HostedZoneId": "Z09298212LCS7P3M5N2EW",
     "Region": "us-east-1",
     "CleanupRecords": "true"
    },
@@ -133,10 +139,175 @@
     "aws:cdk:path": "ApigwLambdaStack/Certificate/CertificateRequestorResource/Default"
    }
   },
-  "getlambdaServiceRole04B81BEC": {
+  "PdfBucketFA9E115A": {
+   "Type": "AWS::S3::Bucket",
+   "Properties": {
+    "BucketName": "srikanth.help",
+    "PublicAccessBlockConfiguration": {
+     "BlockPublicAcls": true,
+     "BlockPublicPolicy": true,
+     "IgnorePublicAcls": true,
+     "RestrictPublicBuckets": true
+    },
+    "Tags": [
+     {
+      "Key": "aws-cdk:auto-delete-objects",
+      "Value": "true"
+     }
+    ]
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "ApigwLambdaStack/PdfBucket/Resource"
+   }
+  },
+  "PdfBucketPolicy89599CFB": {
+   "Type": "AWS::S3::BucketPolicy",
+   "Properties": {
+    "Bucket": {
+     "Ref": "PdfBucketFA9E115A"
+    },
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "s3:DeleteObject*",
+        "s3:GetBucket*",
+        "s3:List*",
+        "s3:PutBucketPolicy"
+       ],
+       "Effect": "Allow",
+       "Principal": {
+        "AWS": {
+         "Fn::GetAtt": [
+          "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092",
+          "Arn"
+         ]
+        }
+       },
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "PdfBucketFA9E115A",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "PdfBucketFA9E115A",
+             "Arn"
+            ]
+           },
+           "/*"
+          ]
+         ]
+        }
+       ]
+      },
+      {
+       "Action": [
+        "s3:GetBucket*",
+        "s3:GetObject*",
+        "s3:List*"
+       ],
+       "Effect": "Allow",
+       "Principal": {
+        "CanonicalUser": {
+         "Fn::GetAtt": [
+          "PdfBucketOAI5DE5A6F2",
+          "S3CanonicalUserId"
+         ]
+        }
+       },
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "PdfBucketFA9E115A",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "PdfBucketFA9E115A",
+             "Arn"
+            ]
+           },
+           "/*"
+          ]
+         ]
+        }
+       ]
+      },
+      {
+       "Action": "s3:GetObject",
+       "Effect": "Allow",
+       "Principal": {
+        "CanonicalUser": {
+         "Fn::GetAtt": [
+          "PdfBucketOAI5DE5A6F2",
+          "S3CanonicalUserId"
+         ]
+        }
+       },
+       "Resource": {
+        "Fn::Join": [
+         "",
+         [
+          {
+           "Fn::GetAtt": [
+            "PdfBucketFA9E115A",
+            "Arn"
+           ]
+          },
+          "/*"
+         ]
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "ApigwLambdaStack/PdfBucket/Policy/Resource"
+   }
+  },
+  "PdfBucketAutoDeleteObjectsCustomResource0E5D0F3D": {
+   "Type": "Custom::S3AutoDeleteObjects",
+   "Properties": {
+    "ServiceToken": {
+     "Fn::GetAtt": [
+      "CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F",
+      "Arn"
+     ]
+    },
+    "BucketName": {
+     "Ref": "PdfBucketFA9E115A"
+    }
+   },
+   "DependsOn": [
+    "PdfBucketPolicy89599CFB"
+   ],
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "ApigwLambdaStack/PdfBucket/AutoDeleteObjectsCustomResource/Default"
+   }
+  },
+  "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092": {
    "Type": "AWS::IAM::Role",
    "Properties": {
     "AssumeRolePolicyDocument": {
+     "Version": "2012-10-17",
      "Statement": [
       {
        "Action": "sts:AssumeRole",
@@ -145,582 +316,112 @@
         "Service": "lambda.amazonaws.com"
        }
       }
-     ],
-     "Version": "2012-10-17"
+     ]
     },
     "ManagedPolicyArns": [
      {
-      "Fn::Join": [
-       "",
-       [
-        "arn:",
-        {
-         "Ref": "AWS::Partition"
-        },
-        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-       ]
-      ]
+      "Fn::Sub": "arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
      }
     ]
    },
    "Metadata": {
-    "aws:cdk:path": "ApigwLambdaStack/get_lambda/ServiceRole/Resource"
+    "aws:cdk:path": "ApigwLambdaStack/Custom::S3AutoDeleteObjectsCustomResourceProvider/Role"
    }
   },
-  "getlambda73E90600": {
+  "CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F": {
    "Type": "AWS::Lambda::Function",
    "Properties": {
     "Code": {
-     "S3Bucket": "cdk-hnb659fds-assets-619831221558-eu-central-1",
-     "S3Key": "39d73ded3659e773b2b01498776f28ba965ed66592b0356f920f16900213661a.zip"
+     "S3Bucket": "cdk-hnb659fds-assets-230150030147-us-east-1",
+     "S3Key": "6c1e9b465fa4b2d651dbc9ce3e732d8702a7b19137327684a71d89f1d355f1a2.zip"
     },
-    "FunctionName": "get_method_lambda",
-    "Handler": "get_method.lambda_handler",
+    "Timeout": 900,
+    "MemorySize": 128,
+    "Handler": "index.handler",
     "Role": {
      "Fn::GetAtt": [
-      "getlambdaServiceRole04B81BEC",
+      "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092",
       "Arn"
      ]
     },
-    "Runtime": "python3.12"
+    "Runtime": "nodejs18.x",
+    "Description": {
+     "Fn::Join": [
+      "",
+      [
+       "Lambda function for auto-deleting objects in ",
+       {
+        "Ref": "PdfBucketFA9E115A"
+       },
+       " S3 bucket."
+      ]
+     ]
+    }
    },
    "DependsOn": [
-    "getlambdaServiceRole04B81BEC"
+    "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092"
    ],
    "Metadata": {
-    "aws:cdk:path": "ApigwLambdaStack/get_lambda/Resource",
-    "aws:asset:path": "asset.39d73ded3659e773b2b01498776f28ba965ed66592b0356f920f16900213661a",
-    "aws:asset:is-bundled": false,
+    "aws:cdk:path": "ApigwLambdaStack/Custom::S3AutoDeleteObjectsCustomResourceProvider/Handler",
+    "aws:asset:path": "asset.6c1e9b465fa4b2d651dbc9ce3e732d8702a7b19137327684a71d89f1d355f1a2",
     "aws:asset:property": "Code"
    }
   },
-  "postlambdaServiceRole342CB485": {
-   "Type": "AWS::IAM::Role",
+  "PdfBucketOAI5DE5A6F2": {
+   "Type": "AWS::CloudFront::CloudFrontOriginAccessIdentity",
    "Properties": {
-    "AssumeRolePolicyDocument": {
-     "Statement": [
-      {
-       "Action": "sts:AssumeRole",
-       "Effect": "Allow",
-       "Principal": {
-        "Service": "lambda.amazonaws.com"
-       }
-      }
-     ],
-     "Version": "2012-10-17"
-    },
-    "ManagedPolicyArns": [
-     {
-      "Fn::Join": [
-       "",
-       [
-        "arn:",
-        {
-         "Ref": "AWS::Partition"
-        },
-        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-       ]
-      ]
-     }
-    ]
-   },
-   "Metadata": {
-    "aws:cdk:path": "ApigwLambdaStack/post_lambda/ServiceRole/Resource"
-   }
-  },
-  "postlambdaCB2B7422": {
-   "Type": "AWS::Lambda::Function",
-   "Properties": {
-    "Code": {
-     "S3Bucket": "cdk-hnb659fds-assets-619831221558-eu-central-1",
-     "S3Key": "39d73ded3659e773b2b01498776f28ba965ed66592b0356f920f16900213661a.zip"
-    },
-    "FunctionName": "post_method_lambda",
-    "Handler": "post_method.lambda_handler",
-    "Role": {
-     "Fn::GetAtt": [
-      "postlambdaServiceRole342CB485",
-      "Arn"
-     ]
-    },
-    "Runtime": "python3.12"
-   },
-   "DependsOn": [
-    "postlambdaServiceRole342CB485"
-   ],
-   "Metadata": {
-    "aws:cdk:path": "ApigwLambdaStack/post_lambda/Resource",
-    "aws:asset:path": "asset.39d73ded3659e773b2b01498776f28ba965ed66592b0356f920f16900213661a",
-    "aws:asset:is-bundled": false,
-    "aws:asset:property": "Code"
-   }
-  },
-  "apiC8550315": {
-   "Type": "AWS::ApiGateway::RestApi",
-   "Properties": {
-    "Description": "This is a rest api",
-    "EndpointConfiguration": {
-     "Types": [
-      "REGIONAL"
-     ]
-    },
-    "Name": "rest_api"
-   },
-   "Metadata": {
-    "aws:cdk:path": "ApigwLambdaStack/api/Resource"
-   }
-  },
-  "apiCloudWatchRoleAC81D93E": {
-   "Type": "AWS::IAM::Role",
-   "Properties": {
-    "AssumeRolePolicyDocument": {
-     "Statement": [
-      {
-       "Action": "sts:AssumeRole",
-       "Effect": "Allow",
-       "Principal": {
-        "Service": "apigateway.amazonaws.com"
-       }
-      }
-     ],
-     "Version": "2012-10-17"
-    },
-    "ManagedPolicyArns": [
-     {
-      "Fn::Join": [
-       "",
-       [
-        "arn:",
-        {
-         "Ref": "AWS::Partition"
-        },
-        ":iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs"
-       ]
-      ]
-     }
-    ]
-   },
-   "UpdateReplacePolicy": "Delete",
-   "DeletionPolicy": "Delete",
-   "Metadata": {
-    "aws:cdk:path": "ApigwLambdaStack/api/CloudWatchRole/Resource"
-   }
-  },
-  "apiAccount57E28B43": {
-   "Type": "AWS::ApiGateway::Account",
-   "Properties": {
-    "CloudWatchRoleArn": {
-     "Fn::GetAtt": [
-      "apiCloudWatchRoleAC81D93E",
-      "Arn"
-     ]
-    }
-   },
-   "DependsOn": [
-    "apiC8550315"
-   ],
-   "UpdateReplacePolicy": "Delete",
-   "DeletionPolicy": "Delete",
-   "Metadata": {
-    "aws:cdk:path": "ApigwLambdaStack/api/Account"
-   }
-  },
-  "apiDeployment149F1294876f0170050cc961a42c1b703100a618": {
-   "Type": "AWS::ApiGateway::Deployment",
-   "Properties": {
-    "Description": "This is a rest api",
-    "RestApiId": {
-     "Ref": "apiC8550315"
-    }
-   },
-   "DependsOn": [
-    "apiGETECF0BD67",
-    "apiOPTIONS5A1027A6",
-    "apiPOST36368FF5"
-   ],
-   "Metadata": {
-    "aws:cdk:path": "ApigwLambdaStack/api/Deployment/Resource"
-   }
-  },
-  "apiDeploymentStagedev96712F43": {
-   "Type": "AWS::ApiGateway::Stage",
-   "Properties": {
-    "DeploymentId": {
-     "Ref": "apiDeployment149F1294876f0170050cc961a42c1b703100a618"
-    },
-    "MethodSettings": [
-     {
-      "DataTraceEnabled": true,
-      "HttpMethod": "*",
-      "LoggingLevel": "INFO",
-      "MetricsEnabled": true,
-      "ResourcePath": "/*"
-     }
-    ],
-    "RestApiId": {
-     "Ref": "apiC8550315"
-    },
-    "StageName": "dev",
-    "TracingEnabled": true
-   },
-   "DependsOn": [
-    "apiAccount57E28B43"
-   ],
-   "Metadata": {
-    "aws:cdk:path": "ApigwLambdaStack/api/DeploymentStage.dev/Resource"
-   }
-  },
-  "apiOPTIONS5A1027A6": {
-   "Type": "AWS::ApiGateway::Method",
-   "Properties": {
-    "ApiKeyRequired": false,
-    "AuthorizationType": "NONE",
-    "HttpMethod": "OPTIONS",
-    "Integration": {
-     "IntegrationResponses": [
-      {
-       "ResponseParameters": {
-        "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
-        "method.response.header.Access-Control-Allow-Origin": "'*'",
-        "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'"
-       },
-       "StatusCode": "204"
-      }
-     ],
-     "RequestTemplates": {
-      "application/json": "{ statusCode: 200 }"
-     },
-     "Type": "MOCK"
-    },
-    "MethodResponses": [
-     {
-      "ResponseParameters": {
-       "method.response.header.Access-Control-Allow-Headers": true,
-       "method.response.header.Access-Control-Allow-Origin": true,
-       "method.response.header.Access-Control-Allow-Methods": true
-      },
-      "StatusCode": "204"
-     }
-    ],
-    "ResourceId": {
-     "Fn::GetAtt": [
-      "apiC8550315",
-      "RootResourceId"
-     ]
-    },
-    "RestApiId": {
-     "Ref": "apiC8550315"
+    "CloudFrontOriginAccessIdentityConfig": {
+     "Comment": "OAI for srikanth.help S3 bucket"
     }
    },
    "Metadata": {
-    "aws:cdk:path": "ApigwLambdaStack/api/Default/OPTIONS/Resource"
+    "aws:cdk:path": "ApigwLambdaStack/PdfBucketOAI/Resource"
    }
   },
-  "apiGETApiPermissionApigwLambdaStackapi68FB2791GET017ABDFB": {
-   "Type": "AWS::Lambda::Permission",
-   "Properties": {
-    "Action": "lambda:InvokeFunction",
-    "FunctionName": {
-     "Fn::GetAtt": [
-      "getlambda73E90600",
-      "Arn"
-     ]
-    },
-    "Principal": "apigateway.amazonaws.com",
-    "SourceArn": {
-     "Fn::Join": [
-      "",
-      [
-       "arn:aws:execute-api:eu-central-1:619831221558:",
-       {
-        "Ref": "apiC8550315"
-       },
-       "/",
-       {
-        "Ref": "apiDeploymentStagedev96712F43"
-       },
-       "/GET/"
-      ]
-     ]
-    }
-   },
-   "Metadata": {
-    "aws:cdk:path": "ApigwLambdaStack/api/Default/GET/ApiPermission.ApigwLambdaStackapi68FB2791.GET.."
-   }
-  },
-  "apiGETApiPermissionTestApigwLambdaStackapi68FB2791GETE3135A8F": {
-   "Type": "AWS::Lambda::Permission",
-   "Properties": {
-    "Action": "lambda:InvokeFunction",
-    "FunctionName": {
-     "Fn::GetAtt": [
-      "getlambda73E90600",
-      "Arn"
-     ]
-    },
-    "Principal": "apigateway.amazonaws.com",
-    "SourceArn": {
-     "Fn::Join": [
-      "",
-      [
-       "arn:aws:execute-api:eu-central-1:619831221558:",
-       {
-        "Ref": "apiC8550315"
-       },
-       "/test-invoke-stage/GET/"
-      ]
-     ]
-    }
-   },
-   "Metadata": {
-    "aws:cdk:path": "ApigwLambdaStack/api/Default/GET/ApiPermission.Test.ApigwLambdaStackapi68FB2791.GET.."
-   }
-  },
-  "apiGETECF0BD67": {
-   "Type": "AWS::ApiGateway::Method",
-   "Properties": {
-    "ApiKeyRequired": false,
-    "AuthorizationType": "NONE",
-    "HttpMethod": "GET",
-    "Integration": {
-     "IntegrationHttpMethod": "POST",
-     "Type": "AWS_PROXY",
-     "Uri": {
-      "Fn::Join": [
-       "",
-       [
-        "arn:aws:apigateway:eu-central-1:lambda:path/2015-03-31/functions/",
-        {
-         "Fn::GetAtt": [
-          "getlambda73E90600",
-          "Arn"
-         ]
-        },
-        "/invocations"
-       ]
-      ]
-     }
-    },
-    "ResourceId": {
-     "Fn::GetAtt": [
-      "apiC8550315",
-      "RootResourceId"
-     ]
-    },
-    "RestApiId": {
-     "Ref": "apiC8550315"
-    }
-   },
-   "Metadata": {
-    "aws:cdk:path": "ApigwLambdaStack/api/Default/GET/Resource"
-   }
-  },
-  "apiPOSTApiPermissionApigwLambdaStackapi68FB2791POSTE22F1BE0": {
-   "Type": "AWS::Lambda::Permission",
-   "Properties": {
-    "Action": "lambda:InvokeFunction",
-    "FunctionName": {
-     "Fn::GetAtt": [
-      "postlambdaCB2B7422",
-      "Arn"
-     ]
-    },
-    "Principal": "apigateway.amazonaws.com",
-    "SourceArn": {
-     "Fn::Join": [
-      "",
-      [
-       "arn:aws:execute-api:eu-central-1:619831221558:",
-       {
-        "Ref": "apiC8550315"
-       },
-       "/",
-       {
-        "Ref": "apiDeploymentStagedev96712F43"
-       },
-       "/POST/"
-      ]
-     ]
-    }
-   },
-   "Metadata": {
-    "aws:cdk:path": "ApigwLambdaStack/api/Default/POST/ApiPermission.ApigwLambdaStackapi68FB2791.POST.."
-   }
-  },
-  "apiPOSTApiPermissionTestApigwLambdaStackapi68FB2791POSTADEA611C": {
-   "Type": "AWS::Lambda::Permission",
-   "Properties": {
-    "Action": "lambda:InvokeFunction",
-    "FunctionName": {
-     "Fn::GetAtt": [
-      "postlambdaCB2B7422",
-      "Arn"
-     ]
-    },
-    "Principal": "apigateway.amazonaws.com",
-    "SourceArn": {
-     "Fn::Join": [
-      "",
-      [
-       "arn:aws:execute-api:eu-central-1:619831221558:",
-       {
-        "Ref": "apiC8550315"
-       },
-       "/test-invoke-stage/POST/"
-      ]
-     ]
-    }
-   },
-   "Metadata": {
-    "aws:cdk:path": "ApigwLambdaStack/api/Default/POST/ApiPermission.Test.ApigwLambdaStackapi68FB2791.POST.."
-   }
-  },
-  "apiPOST36368FF5": {
-   "Type": "AWS::ApiGateway::Method",
-   "Properties": {
-    "ApiKeyRequired": true,
-    "AuthorizationType": "NONE",
-    "HttpMethod": "POST",
-    "Integration": {
-     "IntegrationHttpMethod": "POST",
-     "Type": "AWS_PROXY",
-     "Uri": {
-      "Fn::Join": [
-       "",
-       [
-        "arn:aws:apigateway:eu-central-1:lambda:path/2015-03-31/functions/",
-        {
-         "Fn::GetAtt": [
-          "postlambdaCB2B7422",
-          "Arn"
-         ]
-        },
-        "/invocations"
-       ]
-      ]
-     }
-    },
-    "RequestParameters": {
-     "method.request.header.Content-Type": true
-    },
-    "ResourceId": {
-     "Fn::GetAtt": [
-      "apiC8550315",
-      "RootResourceId"
-     ]
-    },
-    "RestApiId": {
-     "Ref": "apiC8550315"
-    }
-   },
-   "Metadata": {
-    "aws:cdk:path": "ApigwLambdaStack/api/Default/POST/Resource"
-   }
-  },
-  "apiUsagePlan1B3969C7": {
-   "Type": "AWS::ApiGateway::UsagePlan",
-   "Properties": {
-    "ApiStages": [
-     {
-      "ApiId": {
-       "Ref": "apiC8550315"
-      },
-      "Stage": {
-       "Ref": "apiDeploymentStagedev96712F43"
-      },
-      "Throttle": {}
-     }
-    ],
-    "Description": "This is a usage plan",
-    "UsagePlanName": "usage_plan"
-   },
-   "Metadata": {
-    "aws:cdk:path": "ApigwLambdaStack/api/UsagePlan/Resource"
-   }
-  },
-  "apiUsagePlanUsagePlanKeyResourceApigwLambdaStackapiApiKey006CFDBDA2A690DC": {
-   "Type": "AWS::ApiGateway::UsagePlanKey",
-   "Properties": {
-    "KeyId": {
-     "Ref": "apiApiKey9B5BC9C9"
-    },
-    "KeyType": "API_KEY",
-    "UsagePlanId": {
-     "Ref": "apiUsagePlan1B3969C7"
-    }
-   },
-   "Metadata": {
-    "aws:cdk:path": "ApigwLambdaStack/api/UsagePlan/UsagePlanKeyResource:ApigwLambdaStackapiApiKey006CFDBD"
-   }
-  },
-  "apiApiKey9B5BC9C9": {
-   "Type": "AWS::ApiGateway::ApiKey",
-   "Properties": {
-    "Enabled": true,
-    "StageKeys": [
-     {
-      "RestApiId": {
-       "Ref": "apiC8550315"
-      },
-      "StageName": {
-       "Ref": "apiDeploymentStagedev96712F43"
-      }
-     }
-    ]
-   },
-   "Metadata": {
-    "aws:cdk:path": "ApigwLambdaStack/api/ApiKey/Resource"
-   }
-  },
-  "cf27D84970": {
+  "PdfBucketDistribution4384CBC7": {
    "Type": "AWS::CloudFront::Distribution",
    "Properties": {
     "DistributionConfig": {
      "Aliases": [
-      "not-my-money.net"
+      "srikanth.help",
+      "www.srikanth.help",
+      "*.srikanth.help"
      ],
      "DefaultCacheBehavior": {
-      "AllowedMethods": [
-       "GET",
-       "HEAD",
-       "OPTIONS",
-       "PUT",
-       "PATCH",
-       "POST",
-       "DELETE"
-      ],
-      "CachePolicyId": "4135ea2d-6df8-44a3-9df3-4b5a84be39ad",
+      "CachePolicyId": "658327ea-f89d-4fab-a63d-7e88639e58f6",
       "Compress": true,
-      "OriginRequestPolicyId": "b689b0a8-53d0-40ab-baf2-68738e2966ac",
-      "TargetOriginId": "ApigwLambdaStackcfOrigin100719F1E",
-      "ViewerProtocolPolicy": "allow-all"
+      "TargetOriginId": "ApigwLambdaStackPdfBucketDistributionOrigin12733EB0B",
+      "ViewerProtocolPolicy": "redirect-to-https"
      },
+     "DefaultRootObject": "Srikanth_Ankam_Cloud.pdf",
      "Enabled": true,
      "HttpVersion": "http2",
      "IPV6Enabled": true,
      "Origins": [
       {
-       "CustomOriginConfig": {
-        "OriginProtocolPolicy": "https-only",
-        "OriginSSLProtocols": [
-         "TLSv1.2"
-        ]
-       },
        "DomainName": {
-        "Fn::Join": [
-         "",
-         [
-          {
-           "Ref": "apiC8550315"
-          },
-          ".execute-api.eu-central-1.amazonaws.com"
-         ]
+        "Fn::GetAtt": [
+         "PdfBucketFA9E115A",
+         "RegionalDomainName"
         ]
        },
-       "Id": "ApigwLambdaStackcfOrigin100719F1E",
-       "OriginPath": "/dev"
+       "Id": "ApigwLambdaStackPdfBucketDistributionOrigin12733EB0B",
+       "S3OriginConfig": {
+        "OriginAccessIdentity": {
+         "Fn::Join": [
+          "",
+          [
+           "origin-access-identity/cloudfront/",
+           {
+            "Ref": "PdfBucketOAI5DE5A6F2"
+           }
+          ]
+         ]
+        }
+       }
       }
      ],
+     "PriceClass": "PriceClass_100",
      "ViewerCertificate": {
       "AcmCertificateArn": {
        "Fn::GetAtt": [
@@ -734,16 +435,16 @@
     }
    },
    "Metadata": {
-    "aws:cdk:path": "ApigwLambdaStack/cf/Resource"
+    "aws:cdk:path": "ApigwLambdaStack/PdfBucketDistribution/Resource"
    }
   },
-  "AliasRecord851000D2": {
+  "PdfBucketAliasRecordCF38E918": {
    "Type": "AWS::Route53::RecordSet",
    "Properties": {
     "AliasTarget": {
      "DNSName": {
       "Fn::GetAtt": [
-       "cf27D84970",
+       "PdfBucketDistribution4384CBC7",
        "DomainName"
       ]
      },
@@ -757,45 +458,77 @@
       ]
      }
     },
-    "HostedZoneId": "Z06526771KPGQU0GKV5CX",
-    "Name": "not-my-money.net.",
+    "HostedZoneId": "Z09298212LCS7P3M5N2EW",
+    "Name": "srikanth.help.",
     "Type": "A"
    },
    "Metadata": {
-    "aws:cdk:path": "ApigwLambdaStack/AliasRecord/Resource"
+    "aws:cdk:path": "ApigwLambdaStack/PdfBucketAliasRecord/Resource"
+   }
+  },
+  "WwwPdfBucketAliasRecord8A23D7EE": {
+   "Type": "AWS::Route53::RecordSet",
+   "Properties": {
+    "AliasTarget": {
+     "DNSName": {
+      "Fn::GetAtt": [
+       "PdfBucketDistribution4384CBC7",
+       "DomainName"
+      ]
+     },
+     "HostedZoneId": {
+      "Fn::FindInMap": [
+       "AWSCloudFrontPartitionHostedZoneIdMap",
+       {
+        "Ref": "AWS::Partition"
+       },
+       "zoneId"
+      ]
+     }
+    },
+    "HostedZoneId": "Z09298212LCS7P3M5N2EW",
+    "Name": "www.srikanth.help.",
+    "Type": "A"
+   },
+   "Metadata": {
+    "aws:cdk:path": "ApigwLambdaStack/WwwPdfBucketAliasRecord/Resource"
+   }
+  },
+  "PdfBucketAliasAaaaRecord69E0B034": {
+   "Type": "AWS::Route53::RecordSet",
+   "Properties": {
+    "AliasTarget": {
+     "DNSName": {
+      "Fn::GetAtt": [
+       "PdfBucketDistribution4384CBC7",
+       "DomainName"
+      ]
+     },
+     "HostedZoneId": {
+      "Fn::FindInMap": [
+       "AWSCloudFrontPartitionHostedZoneIdMap",
+       {
+        "Ref": "AWS::Partition"
+       },
+       "zoneId"
+      ]
+     }
+    },
+    "HostedZoneId": "Z09298212LCS7P3M5N2EW",
+    "Name": "*.srikanth.help.",
+    "Type": "A"
+   },
+   "Metadata": {
+    "aws:cdk:path": "ApigwLambdaStack/PdfBucketAliasAaaaRecord/Resource"
    }
   },
   "CDKMetadata": {
    "Type": "AWS::CDK::Metadata",
    "Properties": {
-    "Analytics": "v2:deflate64:H4sIAAAAAAAA/22R207DMAyGn4X7LLBVPEC3iRs0UXWC2ylLvWKWQxU7mqqq706assMFV/7+2LL9Oyu5LJby5UldaKGb88LgUQ57VvosaiAfgwaRcodBQ2A8oVYMVjnVQpBbR1/KYJOems09LYyyx0bJ4S06zeid2JzcI1cQLBIlNQpUVg61NzAlcqy8Qd3nukyjoOKgiIBJllNIWq6jPgOvFaXtOmzT1IvqUyMgLjvMve5Yau2jY7GFzvjeQsL0+qCS3zYvMMPVeG6/A/72zZT8o09KNZVR2cr/4h16kWZPYRqfaRTa+Nicgncshy0SBzzG60ke9SiCjwyvhRzKGrQPzexnoj3wOIp8hmlXdK3YRGJvb581W7/xR+QuZr871XWpfhRVn3y450IuV3L19EOIi5DOgxZkPcdfIrq+nBUCAAA="
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/22Q0WoCMRBFv8X3mFaXfoCuFPpQKiv0VcZkdjt1N5HMpCIh/142W6uFPt1zM3cGbpZ6US304wzOPDf2OO/poNNOwBxVg+xjMKjgzPtkMAi1ZEBwAAcdBr1x/A49WRC09W2sehgOFnR6js4Ieafq1l05K4JBp8b3OD4X3fqezGW0E2XF1R6YUVivRlFc6bSO5oiyBkY14bjwQ5Pc7tz7rEzvo22Dd6LTW6CO3MoYZH6x6ISkbNRj5nnM/JvYEEugQ7zWufdZBR8FnyqdVg0aH2xpVmiHkrMqJXYCHblO1ZHFD7+fW6JX/jPaBv9FFkOpXLfuFU4ncl1W24t8ePdQ6cVSV7NPJpqH6IQG1M2k32w8QCnWAQAA"
    },
    "Metadata": {
     "aws:cdk:path": "ApigwLambdaStack/CDKMetadata/Default"
-   }
-  }
- },
- "Outputs": {
-  "apiEndpoint9349E63C": {
-   "Value": {
-    "Fn::Join": [
-     "",
-     [
-      "https://",
-      {
-       "Ref": "apiC8550315"
-      },
-      ".execute-api.eu-central-1.",
-      {
-       "Ref": "AWS::URLSuffix"
-      },
-      "/",
-      {
-       "Ref": "apiDeploymentStagedev96712F43"
-      },
-      "/"
-     ]
-    ]
    }
   }
  },

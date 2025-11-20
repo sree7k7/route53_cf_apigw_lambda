@@ -112,12 +112,14 @@
                                         },
                                         "ForAllValues:StringLike": {
                                           "route53:ChangeResourceRecordSetsNormalizedRecordNames": [
-                                            "*.not-my-money.net"
+                                            "*.srikanth.help",
+                                            "*.www.srikanth.help",
+                                            "*.srikanth.help"
                                           ]
                                         }
                                       },
                                       "Effect": "Allow",
-                                      "Resource": "arn:aws:route53:::hostedzone/Z06526771KPGQU0GKV5CX"
+                                      "Resource": "arn:aws:route53:::hostedzone/Z09298212LCS7P3M5N2EW"
                                     }
                                   ],
                                   "Version": "2012-10-17"
@@ -180,7 +182,7 @@
                       "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
                       "aws:cdk:cloudformation:props": {
                         "code": {
-                          "s3Bucket": "cdk-hnb659fds-assets-619831221558-eu-central-1",
+                          "s3Bucket": "cdk-hnb659fds-assets-230150030147-us-east-1",
                           "s3Key": "b073cebcf4d61fb152a30f5a5e57a94df7f980a549fdf1a79a0b18c5750522d8.zip"
                         },
                         "handler": "index.certificateRequestHandler",
@@ -229,844 +231,261 @@
               "version": "2.131.0"
             }
           },
-          "get_lambda": {
-            "id": "get_lambda",
-            "path": "ApigwLambdaStack/get_lambda",
-            "children": {
-              "ServiceRole": {
-                "id": "ServiceRole",
-                "path": "ApigwLambdaStack/get_lambda/ServiceRole",
-                "children": {
-                  "ImportServiceRole": {
-                    "id": "ImportServiceRole",
-                    "path": "ApigwLambdaStack/get_lambda/ServiceRole/ImportServiceRole",
-                    "constructInfo": {
-                      "fqn": "aws-cdk-lib.Resource",
-                      "version": "2.131.0"
-                    }
-                  },
-                  "Resource": {
-                    "id": "Resource",
-                    "path": "ApigwLambdaStack/get_lambda/ServiceRole/Resource",
-                    "attributes": {
-                      "aws:cdk:cloudformation:type": "AWS::IAM::Role",
-                      "aws:cdk:cloudformation:props": {
-                        "assumeRolePolicyDocument": {
-                          "Statement": [
-                            {
-                              "Action": "sts:AssumeRole",
-                              "Effect": "Allow",
-                              "Principal": {
-                                "Service": "lambda.amazonaws.com"
-                              }
-                            }
-                          ],
-                          "Version": "2012-10-17"
-                        },
-                        "managedPolicyArns": [
-                          {
-                            "Fn::Join": [
-                              "",
-                              [
-                                "arn:",
-                                {
-                                  "Ref": "AWS::Partition"
-                                },
-                                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-                              ]
-                            ]
-                          }
-                        ]
-                      }
-                    },
-                    "constructInfo": {
-                      "fqn": "aws-cdk-lib.aws_iam.CfnRole",
-                      "version": "2.131.0"
-                    }
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "aws-cdk-lib.aws_iam.Role",
-                  "version": "2.131.0"
-                }
-              },
-              "Code": {
-                "id": "Code",
-                "path": "ApigwLambdaStack/get_lambda/Code",
-                "children": {
-                  "Stage": {
-                    "id": "Stage",
-                    "path": "ApigwLambdaStack/get_lambda/Code/Stage",
-                    "constructInfo": {
-                      "fqn": "aws-cdk-lib.AssetStaging",
-                      "version": "2.131.0"
-                    }
-                  },
-                  "AssetBucket": {
-                    "id": "AssetBucket",
-                    "path": "ApigwLambdaStack/get_lambda/Code/AssetBucket",
-                    "constructInfo": {
-                      "fqn": "aws-cdk-lib.aws_s3.BucketBase",
-                      "version": "2.131.0"
-                    }
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "aws-cdk-lib.aws_s3_assets.Asset",
-                  "version": "2.131.0"
-                }
-              },
-              "Resource": {
-                "id": "Resource",
-                "path": "ApigwLambdaStack/get_lambda/Resource",
-                "attributes": {
-                  "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
-                  "aws:cdk:cloudformation:props": {
-                    "code": {
-                      "s3Bucket": "cdk-hnb659fds-assets-619831221558-eu-central-1",
-                      "s3Key": "39d73ded3659e773b2b01498776f28ba965ed66592b0356f920f16900213661a.zip"
-                    },
-                    "functionName": "get_method_lambda",
-                    "handler": "get_method.lambda_handler",
-                    "role": {
-                      "Fn::GetAtt": [
-                        "getlambdaServiceRole04B81BEC",
-                        "Arn"
-                      ]
-                    },
-                    "runtime": "python3.12"
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "aws-cdk-lib.aws_lambda.CfnFunction",
-                  "version": "2.131.0"
-                }
-              }
-            },
-            "constructInfo": {
-              "fqn": "aws-cdk-lib.aws_lambda.Function",
-              "version": "2.131.0"
-            }
-          },
-          "post_lambda": {
-            "id": "post_lambda",
-            "path": "ApigwLambdaStack/post_lambda",
-            "children": {
-              "ServiceRole": {
-                "id": "ServiceRole",
-                "path": "ApigwLambdaStack/post_lambda/ServiceRole",
-                "children": {
-                  "ImportServiceRole": {
-                    "id": "ImportServiceRole",
-                    "path": "ApigwLambdaStack/post_lambda/ServiceRole/ImportServiceRole",
-                    "constructInfo": {
-                      "fqn": "aws-cdk-lib.Resource",
-                      "version": "2.131.0"
-                    }
-                  },
-                  "Resource": {
-                    "id": "Resource",
-                    "path": "ApigwLambdaStack/post_lambda/ServiceRole/Resource",
-                    "attributes": {
-                      "aws:cdk:cloudformation:type": "AWS::IAM::Role",
-                      "aws:cdk:cloudformation:props": {
-                        "assumeRolePolicyDocument": {
-                          "Statement": [
-                            {
-                              "Action": "sts:AssumeRole",
-                              "Effect": "Allow",
-                              "Principal": {
-                                "Service": "lambda.amazonaws.com"
-                              }
-                            }
-                          ],
-                          "Version": "2012-10-17"
-                        },
-                        "managedPolicyArns": [
-                          {
-                            "Fn::Join": [
-                              "",
-                              [
-                                "arn:",
-                                {
-                                  "Ref": "AWS::Partition"
-                                },
-                                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-                              ]
-                            ]
-                          }
-                        ]
-                      }
-                    },
-                    "constructInfo": {
-                      "fqn": "aws-cdk-lib.aws_iam.CfnRole",
-                      "version": "2.131.0"
-                    }
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "aws-cdk-lib.aws_iam.Role",
-                  "version": "2.131.0"
-                }
-              },
-              "Code": {
-                "id": "Code",
-                "path": "ApigwLambdaStack/post_lambda/Code",
-                "children": {
-                  "Stage": {
-                    "id": "Stage",
-                    "path": "ApigwLambdaStack/post_lambda/Code/Stage",
-                    "constructInfo": {
-                      "fqn": "aws-cdk-lib.AssetStaging",
-                      "version": "2.131.0"
-                    }
-                  },
-                  "AssetBucket": {
-                    "id": "AssetBucket",
-                    "path": "ApigwLambdaStack/post_lambda/Code/AssetBucket",
-                    "constructInfo": {
-                      "fqn": "aws-cdk-lib.aws_s3.BucketBase",
-                      "version": "2.131.0"
-                    }
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "aws-cdk-lib.aws_s3_assets.Asset",
-                  "version": "2.131.0"
-                }
-              },
-              "Resource": {
-                "id": "Resource",
-                "path": "ApigwLambdaStack/post_lambda/Resource",
-                "attributes": {
-                  "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
-                  "aws:cdk:cloudformation:props": {
-                    "code": {
-                      "s3Bucket": "cdk-hnb659fds-assets-619831221558-eu-central-1",
-                      "s3Key": "39d73ded3659e773b2b01498776f28ba965ed66592b0356f920f16900213661a.zip"
-                    },
-                    "functionName": "post_method_lambda",
-                    "handler": "post_method.lambda_handler",
-                    "role": {
-                      "Fn::GetAtt": [
-                        "postlambdaServiceRole342CB485",
-                        "Arn"
-                      ]
-                    },
-                    "runtime": "python3.12"
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "aws-cdk-lib.aws_lambda.CfnFunction",
-                  "version": "2.131.0"
-                }
-              }
-            },
-            "constructInfo": {
-              "fqn": "aws-cdk-lib.aws_lambda.Function",
-              "version": "2.131.0"
-            }
-          },
-          "api": {
-            "id": "api",
-            "path": "ApigwLambdaStack/api",
+          "PdfBucket": {
+            "id": "PdfBucket",
+            "path": "ApigwLambdaStack/PdfBucket",
             "children": {
               "Resource": {
                 "id": "Resource",
-                "path": "ApigwLambdaStack/api/Resource",
+                "path": "ApigwLambdaStack/PdfBucket/Resource",
                 "attributes": {
-                  "aws:cdk:cloudformation:type": "AWS::ApiGateway::RestApi",
+                  "aws:cdk:cloudformation:type": "AWS::S3::Bucket",
                   "aws:cdk:cloudformation:props": {
-                    "description": "This is a rest api",
-                    "endpointConfiguration": {
-                      "types": [
-                        "REGIONAL"
-                      ]
+                    "bucketName": "srikanth.help",
+                    "publicAccessBlockConfiguration": {
+                      "blockPublicAcls": true,
+                      "blockPublicPolicy": true,
+                      "ignorePublicAcls": true,
+                      "restrictPublicBuckets": true
                     },
-                    "name": "rest_api"
+                    "tags": [
+                      {
+                        "key": "aws-cdk:auto-delete-objects",
+                        "value": "true"
+                      }
+                    ]
                   }
                 },
                 "constructInfo": {
-                  "fqn": "aws-cdk-lib.aws_apigateway.CfnRestApi",
+                  "fqn": "aws-cdk-lib.aws_s3.CfnBucket",
                   "version": "2.131.0"
                 }
               },
-              "CloudWatchRole": {
-                "id": "CloudWatchRole",
-                "path": "ApigwLambdaStack/api/CloudWatchRole",
+              "Policy": {
+                "id": "Policy",
+                "path": "ApigwLambdaStack/PdfBucket/Policy",
                 "children": {
-                  "ImportCloudWatchRole": {
-                    "id": "ImportCloudWatchRole",
-                    "path": "ApigwLambdaStack/api/CloudWatchRole/ImportCloudWatchRole",
-                    "constructInfo": {
-                      "fqn": "aws-cdk-lib.Resource",
-                      "version": "2.131.0"
-                    }
-                  },
                   "Resource": {
                     "id": "Resource",
-                    "path": "ApigwLambdaStack/api/CloudWatchRole/Resource",
+                    "path": "ApigwLambdaStack/PdfBucket/Policy/Resource",
                     "attributes": {
-                      "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                      "aws:cdk:cloudformation:type": "AWS::S3::BucketPolicy",
                       "aws:cdk:cloudformation:props": {
-                        "assumeRolePolicyDocument": {
+                        "bucket": {
+                          "Ref": "PdfBucketFA9E115A"
+                        },
+                        "policyDocument": {
                           "Statement": [
                             {
-                              "Action": "sts:AssumeRole",
+                              "Action": [
+                                "s3:DeleteObject*",
+                                "s3:GetBucket*",
+                                "s3:List*",
+                                "s3:PutBucketPolicy"
+                              ],
                               "Effect": "Allow",
                               "Principal": {
-                                "Service": "apigateway.amazonaws.com"
-                              }
-                            }
-                          ],
-                          "Version": "2012-10-17"
-                        },
-                        "managedPolicyArns": [
-                          {
-                            "Fn::Join": [
-                              "",
-                              [
-                                "arn:",
-                                {
-                                  "Ref": "AWS::Partition"
-                                },
-                                ":iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs"
-                              ]
-                            ]
-                          }
-                        ]
-                      }
-                    },
-                    "constructInfo": {
-                      "fqn": "aws-cdk-lib.aws_iam.CfnRole",
-                      "version": "2.131.0"
-                    }
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "aws-cdk-lib.aws_iam.Role",
-                  "version": "2.131.0"
-                }
-              },
-              "Account": {
-                "id": "Account",
-                "path": "ApigwLambdaStack/api/Account",
-                "attributes": {
-                  "aws:cdk:cloudformation:type": "AWS::ApiGateway::Account",
-                  "aws:cdk:cloudformation:props": {
-                    "cloudWatchRoleArn": {
-                      "Fn::GetAtt": [
-                        "apiCloudWatchRoleAC81D93E",
-                        "Arn"
-                      ]
-                    }
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "aws-cdk-lib.aws_apigateway.CfnAccount",
-                  "version": "2.131.0"
-                }
-              },
-              "Deployment": {
-                "id": "Deployment",
-                "path": "ApigwLambdaStack/api/Deployment",
-                "children": {
-                  "Resource": {
-                    "id": "Resource",
-                    "path": "ApigwLambdaStack/api/Deployment/Resource",
-                    "attributes": {
-                      "aws:cdk:cloudformation:type": "AWS::ApiGateway::Deployment",
-                      "aws:cdk:cloudformation:props": {
-                        "description": "This is a rest api",
-                        "restApiId": {
-                          "Ref": "apiC8550315"
-                        }
-                      }
-                    },
-                    "constructInfo": {
-                      "fqn": "aws-cdk-lib.aws_apigateway.CfnDeployment",
-                      "version": "2.131.0"
-                    }
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "aws-cdk-lib.aws_apigateway.Deployment",
-                  "version": "2.131.0"
-                }
-              },
-              "DeploymentStage.dev": {
-                "id": "DeploymentStage.dev",
-                "path": "ApigwLambdaStack/api/DeploymentStage.dev",
-                "children": {
-                  "Resource": {
-                    "id": "Resource",
-                    "path": "ApigwLambdaStack/api/DeploymentStage.dev/Resource",
-                    "attributes": {
-                      "aws:cdk:cloudformation:type": "AWS::ApiGateway::Stage",
-                      "aws:cdk:cloudformation:props": {
-                        "deploymentId": {
-                          "Ref": "apiDeployment149F1294876f0170050cc961a42c1b703100a618"
-                        },
-                        "methodSettings": [
-                          {
-                            "httpMethod": "*",
-                            "resourcePath": "/*",
-                            "dataTraceEnabled": true,
-                            "loggingLevel": "INFO",
-                            "metricsEnabled": true
-                          }
-                        ],
-                        "restApiId": {
-                          "Ref": "apiC8550315"
-                        },
-                        "stageName": "dev",
-                        "tracingEnabled": true
-                      }
-                    },
-                    "constructInfo": {
-                      "fqn": "aws-cdk-lib.aws_apigateway.CfnStage",
-                      "version": "2.131.0"
-                    }
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "aws-cdk-lib.aws_apigateway.Stage",
-                  "version": "2.131.0"
-                }
-              },
-              "Endpoint": {
-                "id": "Endpoint",
-                "path": "ApigwLambdaStack/api/Endpoint",
-                "constructInfo": {
-                  "fqn": "aws-cdk-lib.CfnOutput",
-                  "version": "2.131.0"
-                }
-              },
-              "Default": {
-                "id": "Default",
-                "path": "ApigwLambdaStack/api/Default",
-                "children": {
-                  "OPTIONS": {
-                    "id": "OPTIONS",
-                    "path": "ApigwLambdaStack/api/Default/OPTIONS",
-                    "children": {
-                      "Resource": {
-                        "id": "Resource",
-                        "path": "ApigwLambdaStack/api/Default/OPTIONS/Resource",
-                        "attributes": {
-                          "aws:cdk:cloudformation:type": "AWS::ApiGateway::Method",
-                          "aws:cdk:cloudformation:props": {
-                            "apiKeyRequired": false,
-                            "authorizationType": "NONE",
-                            "httpMethod": "OPTIONS",
-                            "integration": {
-                              "type": "MOCK",
-                              "requestTemplates": {
-                                "application/json": "{ statusCode: 200 }"
+                                "AWS": {
+                                  "Fn::GetAtt": [
+                                    "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092",
+                                    "Arn"
+                                  ]
+                                }
                               },
-                              "integrationResponses": [
+                              "Resource": [
                                 {
-                                  "statusCode": "204",
-                                  "responseParameters": {
-                                    "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
-                                    "method.response.header.Access-Control-Allow-Origin": "'*'",
-                                    "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'"
-                                  }
+                                  "Fn::GetAtt": [
+                                    "PdfBucketFA9E115A",
+                                    "Arn"
+                                  ]
+                                },
+                                {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      {
+                                        "Fn::GetAtt": [
+                                          "PdfBucketFA9E115A",
+                                          "Arn"
+                                        ]
+                                      },
+                                      "/*"
+                                    ]
+                                  ]
                                 }
                               ]
                             },
-                            "methodResponses": [
-                              {
-                                "statusCode": "204",
-                                "responseParameters": {
-                                  "method.response.header.Access-Control-Allow-Headers": true,
-                                  "method.response.header.Access-Control-Allow-Origin": true,
-                                  "method.response.header.Access-Control-Allow-Methods": true
+                            {
+                              "Action": [
+                                "s3:GetBucket*",
+                                "s3:GetObject*",
+                                "s3:List*"
+                              ],
+                              "Effect": "Allow",
+                              "Principal": {
+                                "CanonicalUser": {
+                                  "Fn::GetAtt": [
+                                    "PdfBucketOAI5DE5A6F2",
+                                    "S3CanonicalUserId"
+                                  ]
                                 }
+                              },
+                              "Resource": [
+                                {
+                                  "Fn::GetAtt": [
+                                    "PdfBucketFA9E115A",
+                                    "Arn"
+                                  ]
+                                },
+                                {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      {
+                                        "Fn::GetAtt": [
+                                          "PdfBucketFA9E115A",
+                                          "Arn"
+                                        ]
+                                      },
+                                      "/*"
+                                    ]
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "Action": "s3:GetObject",
+                              "Effect": "Allow",
+                              "Principal": {
+                                "CanonicalUser": {
+                                  "Fn::GetAtt": [
+                                    "PdfBucketOAI5DE5A6F2",
+                                    "S3CanonicalUserId"
+                                  ]
+                                }
+                              },
+                              "Resource": {
+                                "Fn::Join": [
+                                  "",
+                                  [
+                                    {
+                                      "Fn::GetAtt": [
+                                        "PdfBucketFA9E115A",
+                                        "Arn"
+                                      ]
+                                    },
+                                    "/*"
+                                  ]
+                                ]
                               }
-                            ],
-                            "resourceId": {
-                              "Fn::GetAtt": [
-                                "apiC8550315",
-                                "RootResourceId"
-                              ]
-                            },
-                            "restApiId": {
-                              "Ref": "apiC8550315"
                             }
-                          }
-                        },
-                        "constructInfo": {
-                          "fqn": "aws-cdk-lib.aws_apigateway.CfnMethod",
-                          "version": "2.131.0"
+                          ],
+                          "Version": "2012-10-17"
                         }
                       }
                     },
                     "constructInfo": {
-                      "fqn": "aws-cdk-lib.aws_apigateway.Method",
-                      "version": "2.131.0"
-                    }
-                  },
-                  "GET": {
-                    "id": "GET",
-                    "path": "ApigwLambdaStack/api/Default/GET",
-                    "children": {
-                      "ApiPermission.ApigwLambdaStackapi68FB2791.GET..": {
-                        "id": "ApiPermission.ApigwLambdaStackapi68FB2791.GET..",
-                        "path": "ApigwLambdaStack/api/Default/GET/ApiPermission.ApigwLambdaStackapi68FB2791.GET..",
-                        "attributes": {
-                          "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
-                          "aws:cdk:cloudformation:props": {
-                            "action": "lambda:InvokeFunction",
-                            "functionName": {
-                              "Fn::GetAtt": [
-                                "getlambda73E90600",
-                                "Arn"
-                              ]
-                            },
-                            "principal": "apigateway.amazonaws.com",
-                            "sourceArn": {
-                              "Fn::Join": [
-                                "",
-                                [
-                                  "arn:aws:execute-api:eu-central-1:619831221558:",
-                                  {
-                                    "Ref": "apiC8550315"
-                                  },
-                                  "/",
-                                  {
-                                    "Ref": "apiDeploymentStagedev96712F43"
-                                  },
-                                  "/GET/"
-                                ]
-                              ]
-                            }
-                          }
-                        },
-                        "constructInfo": {
-                          "fqn": "aws-cdk-lib.aws_lambda.CfnPermission",
-                          "version": "2.131.0"
-                        }
-                      },
-                      "ApiPermission.Test.ApigwLambdaStackapi68FB2791.GET..": {
-                        "id": "ApiPermission.Test.ApigwLambdaStackapi68FB2791.GET..",
-                        "path": "ApigwLambdaStack/api/Default/GET/ApiPermission.Test.ApigwLambdaStackapi68FB2791.GET..",
-                        "attributes": {
-                          "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
-                          "aws:cdk:cloudformation:props": {
-                            "action": "lambda:InvokeFunction",
-                            "functionName": {
-                              "Fn::GetAtt": [
-                                "getlambda73E90600",
-                                "Arn"
-                              ]
-                            },
-                            "principal": "apigateway.amazonaws.com",
-                            "sourceArn": {
-                              "Fn::Join": [
-                                "",
-                                [
-                                  "arn:aws:execute-api:eu-central-1:619831221558:",
-                                  {
-                                    "Ref": "apiC8550315"
-                                  },
-                                  "/test-invoke-stage/GET/"
-                                ]
-                              ]
-                            }
-                          }
-                        },
-                        "constructInfo": {
-                          "fqn": "aws-cdk-lib.aws_lambda.CfnPermission",
-                          "version": "2.131.0"
-                        }
-                      },
-                      "Resource": {
-                        "id": "Resource",
-                        "path": "ApigwLambdaStack/api/Default/GET/Resource",
-                        "attributes": {
-                          "aws:cdk:cloudformation:type": "AWS::ApiGateway::Method",
-                          "aws:cdk:cloudformation:props": {
-                            "apiKeyRequired": false,
-                            "authorizationType": "NONE",
-                            "httpMethod": "GET",
-                            "integration": {
-                              "type": "AWS_PROXY",
-                              "uri": {
-                                "Fn::Join": [
-                                  "",
-                                  [
-                                    "arn:aws:apigateway:eu-central-1:lambda:path/2015-03-31/functions/",
-                                    {
-                                      "Fn::GetAtt": [
-                                        "getlambda73E90600",
-                                        "Arn"
-                                      ]
-                                    },
-                                    "/invocations"
-                                  ]
-                                ]
-                              },
-                              "integrationHttpMethod": "POST"
-                            },
-                            "resourceId": {
-                              "Fn::GetAtt": [
-                                "apiC8550315",
-                                "RootResourceId"
-                              ]
-                            },
-                            "restApiId": {
-                              "Ref": "apiC8550315"
-                            }
-                          }
-                        },
-                        "constructInfo": {
-                          "fqn": "aws-cdk-lib.aws_apigateway.CfnMethod",
-                          "version": "2.131.0"
-                        }
-                      }
-                    },
-                    "constructInfo": {
-                      "fqn": "aws-cdk-lib.aws_apigateway.Method",
-                      "version": "2.131.0"
-                    }
-                  },
-                  "POST": {
-                    "id": "POST",
-                    "path": "ApigwLambdaStack/api/Default/POST",
-                    "children": {
-                      "ApiPermission.ApigwLambdaStackapi68FB2791.POST..": {
-                        "id": "ApiPermission.ApigwLambdaStackapi68FB2791.POST..",
-                        "path": "ApigwLambdaStack/api/Default/POST/ApiPermission.ApigwLambdaStackapi68FB2791.POST..",
-                        "attributes": {
-                          "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
-                          "aws:cdk:cloudformation:props": {
-                            "action": "lambda:InvokeFunction",
-                            "functionName": {
-                              "Fn::GetAtt": [
-                                "postlambdaCB2B7422",
-                                "Arn"
-                              ]
-                            },
-                            "principal": "apigateway.amazonaws.com",
-                            "sourceArn": {
-                              "Fn::Join": [
-                                "",
-                                [
-                                  "arn:aws:execute-api:eu-central-1:619831221558:",
-                                  {
-                                    "Ref": "apiC8550315"
-                                  },
-                                  "/",
-                                  {
-                                    "Ref": "apiDeploymentStagedev96712F43"
-                                  },
-                                  "/POST/"
-                                ]
-                              ]
-                            }
-                          }
-                        },
-                        "constructInfo": {
-                          "fqn": "aws-cdk-lib.aws_lambda.CfnPermission",
-                          "version": "2.131.0"
-                        }
-                      },
-                      "ApiPermission.Test.ApigwLambdaStackapi68FB2791.POST..": {
-                        "id": "ApiPermission.Test.ApigwLambdaStackapi68FB2791.POST..",
-                        "path": "ApigwLambdaStack/api/Default/POST/ApiPermission.Test.ApigwLambdaStackapi68FB2791.POST..",
-                        "attributes": {
-                          "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
-                          "aws:cdk:cloudformation:props": {
-                            "action": "lambda:InvokeFunction",
-                            "functionName": {
-                              "Fn::GetAtt": [
-                                "postlambdaCB2B7422",
-                                "Arn"
-                              ]
-                            },
-                            "principal": "apigateway.amazonaws.com",
-                            "sourceArn": {
-                              "Fn::Join": [
-                                "",
-                                [
-                                  "arn:aws:execute-api:eu-central-1:619831221558:",
-                                  {
-                                    "Ref": "apiC8550315"
-                                  },
-                                  "/test-invoke-stage/POST/"
-                                ]
-                              ]
-                            }
-                          }
-                        },
-                        "constructInfo": {
-                          "fqn": "aws-cdk-lib.aws_lambda.CfnPermission",
-                          "version": "2.131.0"
-                        }
-                      },
-                      "Resource": {
-                        "id": "Resource",
-                        "path": "ApigwLambdaStack/api/Default/POST/Resource",
-                        "attributes": {
-                          "aws:cdk:cloudformation:type": "AWS::ApiGateway::Method",
-                          "aws:cdk:cloudformation:props": {
-                            "apiKeyRequired": true,
-                            "authorizationType": "NONE",
-                            "httpMethod": "POST",
-                            "integration": {
-                              "type": "AWS_PROXY",
-                              "uri": {
-                                "Fn::Join": [
-                                  "",
-                                  [
-                                    "arn:aws:apigateway:eu-central-1:lambda:path/2015-03-31/functions/",
-                                    {
-                                      "Fn::GetAtt": [
-                                        "postlambdaCB2B7422",
-                                        "Arn"
-                                      ]
-                                    },
-                                    "/invocations"
-                                  ]
-                                ]
-                              },
-                              "integrationHttpMethod": "POST"
-                            },
-                            "requestParameters": {
-                              "method.request.header.Content-Type": true
-                            },
-                            "resourceId": {
-                              "Fn::GetAtt": [
-                                "apiC8550315",
-                                "RootResourceId"
-                              ]
-                            },
-                            "restApiId": {
-                              "Ref": "apiC8550315"
-                            }
-                          }
-                        },
-                        "constructInfo": {
-                          "fqn": "aws-cdk-lib.aws_apigateway.CfnMethod",
-                          "version": "2.131.0"
-                        }
-                      }
-                    },
-                    "constructInfo": {
-                      "fqn": "aws-cdk-lib.aws_apigateway.Method",
+                      "fqn": "aws-cdk-lib.aws_s3.CfnBucketPolicy",
                       "version": "2.131.0"
                     }
                   }
                 },
                 "constructInfo": {
-                  "fqn": "aws-cdk-lib.aws_apigateway.ResourceBase",
+                  "fqn": "aws-cdk-lib.aws_s3.BucketPolicy",
                   "version": "2.131.0"
                 }
               },
-              "UsagePlan": {
-                "id": "UsagePlan",
-                "path": "ApigwLambdaStack/api/UsagePlan",
+              "AutoDeleteObjectsCustomResource": {
+                "id": "AutoDeleteObjectsCustomResource",
+                "path": "ApigwLambdaStack/PdfBucket/AutoDeleteObjectsCustomResource",
                 "children": {
-                  "Resource": {
-                    "id": "Resource",
-                    "path": "ApigwLambdaStack/api/UsagePlan/Resource",
-                    "attributes": {
-                      "aws:cdk:cloudformation:type": "AWS::ApiGateway::UsagePlan",
-                      "aws:cdk:cloudformation:props": {
-                        "apiStages": [
-                          {
-                            "apiId": {
-                              "Ref": "apiC8550315"
-                            },
-                            "stage": {
-                              "Ref": "apiDeploymentStagedev96712F43"
-                            },
-                            "throttle": {}
-                          }
-                        ],
-                        "description": "This is a usage plan",
-                        "usagePlanName": "usage_plan"
-                      }
-                    },
+                  "Default": {
+                    "id": "Default",
+                    "path": "ApigwLambdaStack/PdfBucket/AutoDeleteObjectsCustomResource/Default",
                     "constructInfo": {
-                      "fqn": "aws-cdk-lib.aws_apigateway.CfnUsagePlan",
-                      "version": "2.131.0"
-                    }
-                  },
-                  "UsagePlanKeyResource:ApigwLambdaStackapiApiKey006CFDBD": {
-                    "id": "UsagePlanKeyResource:ApigwLambdaStackapiApiKey006CFDBD",
-                    "path": "ApigwLambdaStack/api/UsagePlan/UsagePlanKeyResource:ApigwLambdaStackapiApiKey006CFDBD",
-                    "attributes": {
-                      "aws:cdk:cloudformation:type": "AWS::ApiGateway::UsagePlanKey",
-                      "aws:cdk:cloudformation:props": {
-                        "keyId": {
-                          "Ref": "apiApiKey9B5BC9C9"
-                        },
-                        "keyType": "API_KEY",
-                        "usagePlanId": {
-                          "Ref": "apiUsagePlan1B3969C7"
-                        }
-                      }
-                    },
-                    "constructInfo": {
-                      "fqn": "aws-cdk-lib.aws_apigateway.CfnUsagePlanKey",
+                      "fqn": "aws-cdk-lib.CfnResource",
                       "version": "2.131.0"
                     }
                   }
                 },
                 "constructInfo": {
-                  "fqn": "aws-cdk-lib.aws_apigateway.UsagePlan",
-                  "version": "2.131.0"
-                }
-              },
-              "ApiKey": {
-                "id": "ApiKey",
-                "path": "ApigwLambdaStack/api/ApiKey",
-                "children": {
-                  "Resource": {
-                    "id": "Resource",
-                    "path": "ApigwLambdaStack/api/ApiKey/Resource",
-                    "attributes": {
-                      "aws:cdk:cloudformation:type": "AWS::ApiGateway::ApiKey",
-                      "aws:cdk:cloudformation:props": {
-                        "enabled": true,
-                        "stageKeys": [
-                          {
-                            "restApiId": {
-                              "Ref": "apiC8550315"
-                            },
-                            "stageName": {
-                              "Ref": "apiDeploymentStagedev96712F43"
-                            }
-                          }
-                        ]
-                      }
-                    },
-                    "constructInfo": {
-                      "fqn": "aws-cdk-lib.aws_apigateway.CfnApiKey",
-                      "version": "2.131.0"
-                    }
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "aws-cdk-lib.aws_apigateway.ApiKey",
+                  "fqn": "aws-cdk-lib.CustomResource",
                   "version": "2.131.0"
                 }
               }
             },
             "constructInfo": {
-              "fqn": "aws-cdk-lib.aws_apigateway.RestApi",
+              "fqn": "aws-cdk-lib.aws_s3.Bucket",
               "version": "2.131.0"
             }
           },
-          "cf": {
-            "id": "cf",
-            "path": "ApigwLambdaStack/cf",
+          "Custom::S3AutoDeleteObjectsCustomResourceProvider": {
+            "id": "Custom::S3AutoDeleteObjectsCustomResourceProvider",
+            "path": "ApigwLambdaStack/Custom::S3AutoDeleteObjectsCustomResourceProvider",
+            "children": {
+              "Staging": {
+                "id": "Staging",
+                "path": "ApigwLambdaStack/Custom::S3AutoDeleteObjectsCustomResourceProvider/Staging",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.AssetStaging",
+                  "version": "2.131.0"
+                }
+              },
+              "Role": {
+                "id": "Role",
+                "path": "ApigwLambdaStack/Custom::S3AutoDeleteObjectsCustomResourceProvider/Role",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnResource",
+                  "version": "2.131.0"
+                }
+              },
+              "Handler": {
+                "id": "Handler",
+                "path": "ApigwLambdaStack/Custom::S3AutoDeleteObjectsCustomResourceProvider/Handler",
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.CfnResource",
+                  "version": "2.131.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CustomResourceProviderBase",
+              "version": "2.131.0"
+            }
+          },
+          "PdfBucketOAI": {
+            "id": "PdfBucketOAI",
+            "path": "ApigwLambdaStack/PdfBucketOAI",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "ApigwLambdaStack/PdfBucketOAI/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::CloudFront::CloudFrontOriginAccessIdentity",
+                  "aws:cdk:cloudformation:props": {
+                    "cloudFrontOriginAccessIdentityConfig": {
+                      "comment": "OAI for srikanth.help S3 bucket"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_cloudfront.CfnCloudFrontOriginAccessIdentity",
+                  "version": "2.131.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_cloudfront.OriginAccessIdentity",
+              "version": "2.131.0"
+            }
+          },
+          "PdfBucketDistribution": {
+            "id": "PdfBucketDistribution",
+            "path": "ApigwLambdaStack/PdfBucketDistribution",
             "children": {
               "Origin1": {
                 "id": "Origin1",
-                "path": "ApigwLambdaStack/cf/Origin1",
+                "path": "ApigwLambdaStack/PdfBucketDistribution/Origin1",
                 "constructInfo": {
                   "fqn": "constructs.Construct",
                   "version": "10.3.0"
@@ -1074,7 +493,7 @@
               },
               "Resource": {
                 "id": "Resource",
-                "path": "ApigwLambdaStack/cf/Resource",
+                "path": "ApigwLambdaStack/PdfBucketDistribution/Resource",
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::CloudFront::Distribution",
                   "aws:cdk:cloudformation:props": {
@@ -1083,48 +502,43 @@
                       "origins": [
                         {
                           "domainName": {
-                            "Fn::Join": [
-                              "",
-                              [
-                                {
-                                  "Ref": "apiC8550315"
-                                },
-                                ".execute-api.eu-central-1.amazonaws.com"
-                              ]
+                            "Fn::GetAtt": [
+                              "PdfBucketFA9E115A",
+                              "RegionalDomainName"
                             ]
                           },
-                          "id": "ApigwLambdaStackcfOrigin100719F1E",
-                          "originPath": "/dev",
-                          "customOriginConfig": {
-                            "originSslProtocols": [
-                              "TLSv1.2"
-                            ],
-                            "originProtocolPolicy": "https-only"
+                          "id": "ApigwLambdaStackPdfBucketDistributionOrigin12733EB0B",
+                          "s3OriginConfig": {
+                            "originAccessIdentity": {
+                              "Fn::Join": [
+                                "",
+                                [
+                                  "origin-access-identity/cloudfront/",
+                                  {
+                                    "Ref": "PdfBucketOAI5DE5A6F2"
+                                  }
+                                ]
+                              ]
+                            }
                           }
                         }
                       ],
                       "defaultCacheBehavior": {
                         "pathPattern": "*",
-                        "targetOriginId": "ApigwLambdaStackcfOrigin100719F1E",
-                        "allowedMethods": [
-                          "GET",
-                          "HEAD",
-                          "OPTIONS",
-                          "PUT",
-                          "PATCH",
-                          "POST",
-                          "DELETE"
-                        ],
-                        "cachePolicyId": "4135ea2d-6df8-44a3-9df3-4b5a84be39ad",
+                        "targetOriginId": "ApigwLambdaStackPdfBucketDistributionOrigin12733EB0B",
+                        "cachePolicyId": "658327ea-f89d-4fab-a63d-7e88639e58f6",
                         "compress": true,
-                        "originRequestPolicyId": "b689b0a8-53d0-40ab-baf2-68738e2966ac",
-                        "viewerProtocolPolicy": "allow-all"
+                        "viewerProtocolPolicy": "redirect-to-https"
                       },
                       "aliases": [
-                        "not-my-money.net"
+                        "srikanth.help",
+                        "www.srikanth.help",
+                        "*.srikanth.help"
                       ],
+                      "defaultRootObject": "Srikanth_Ankam_Cloud.pdf",
                       "httpVersion": "http2",
                       "ipv6Enabled": true,
+                      "priceClass": "PriceClass_100",
                       "viewerCertificate": {
                         "acmCertificateArn": {
                           "Fn::GetAtt": [
@@ -1149,13 +563,13 @@
               "version": "2.131.0"
             }
           },
-          "AliasRecord": {
-            "id": "AliasRecord",
-            "path": "ApigwLambdaStack/AliasRecord",
+          "PdfBucketAliasRecord": {
+            "id": "PdfBucketAliasRecord",
+            "path": "ApigwLambdaStack/PdfBucketAliasRecord",
             "children": {
               "Resource": {
                 "id": "Resource",
-                "path": "ApigwLambdaStack/AliasRecord/Resource",
+                "path": "ApigwLambdaStack/PdfBucketAliasRecord/Resource",
                 "attributes": {
                   "aws:cdk:cloudformation:type": "AWS::Route53::RecordSet",
                   "aws:cdk:cloudformation:props": {
@@ -1171,13 +585,13 @@
                       },
                       "dnsName": {
                         "Fn::GetAtt": [
-                          "cf27D84970",
+                          "PdfBucketDistribution4384CBC7",
                           "DomainName"
                         ]
                       }
                     },
-                    "hostedZoneId": "Z06526771KPGQU0GKV5CX",
-                    "name": "not-my-money.net.",
+                    "hostedZoneId": "Z09298212LCS7P3M5N2EW",
+                    "name": "srikanth.help.",
                     "type": "A"
                   }
                 },
@@ -1197,6 +611,92 @@
             "path": "ApigwLambdaStack/AWSCloudFrontPartitionHostedZoneIdMap",
             "constructInfo": {
               "fqn": "aws-cdk-lib.CfnMapping",
+              "version": "2.131.0"
+            }
+          },
+          "WwwPdfBucketAliasRecord": {
+            "id": "WwwPdfBucketAliasRecord",
+            "path": "ApigwLambdaStack/WwwPdfBucketAliasRecord",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "ApigwLambdaStack/WwwPdfBucketAliasRecord/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Route53::RecordSet",
+                  "aws:cdk:cloudformation:props": {
+                    "aliasTarget": {
+                      "hostedZoneId": {
+                        "Fn::FindInMap": [
+                          "AWSCloudFrontPartitionHostedZoneIdMap",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          "zoneId"
+                        ]
+                      },
+                      "dnsName": {
+                        "Fn::GetAtt": [
+                          "PdfBucketDistribution4384CBC7",
+                          "DomainName"
+                        ]
+                      }
+                    },
+                    "hostedZoneId": "Z09298212LCS7P3M5N2EW",
+                    "name": "www.srikanth.help.",
+                    "type": "A"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_route53.CfnRecordSet",
+                  "version": "2.131.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_route53.ARecord",
+              "version": "2.131.0"
+            }
+          },
+          "PdfBucketAliasAaaaRecord": {
+            "id": "PdfBucketAliasAaaaRecord",
+            "path": "ApigwLambdaStack/PdfBucketAliasAaaaRecord",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "ApigwLambdaStack/PdfBucketAliasAaaaRecord/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::Route53::RecordSet",
+                  "aws:cdk:cloudformation:props": {
+                    "aliasTarget": {
+                      "hostedZoneId": {
+                        "Fn::FindInMap": [
+                          "AWSCloudFrontPartitionHostedZoneIdMap",
+                          {
+                            "Ref": "AWS::Partition"
+                          },
+                          "zoneId"
+                        ]
+                      },
+                      "dnsName": {
+                        "Fn::GetAtt": [
+                          "PdfBucketDistribution4384CBC7",
+                          "DomainName"
+                        ]
+                      }
+                    },
+                    "hostedZoneId": "Z09298212LCS7P3M5N2EW",
+                    "name": "*.srikanth.help.",
+                    "type": "A"
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_route53.CfnRecordSet",
+                  "version": "2.131.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_route53.ARecord",
               "version": "2.131.0"
             }
           },
